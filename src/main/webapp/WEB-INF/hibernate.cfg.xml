@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-configuration
+        PUBLIC "-//Hibernate/Hibernate Configuration DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+	<session-factory>
+		<!-- The dialect to be used for the hibernate and config.database interactions -->
+		<property name="hibernate.dialect">org.hibernate.dialect.SQLServerDialect</property>
+
+		<!-- You will usually want to set this to true while debugging hibernate 
+			queries -->
+		<property name="hibernate.show_sql">false</property>
+
+		<!-- Map the app related object entity classes here -->
+
+
+		<mapping class="com.entity.LineNo" />
+		<mapping class="com.entity.Parts" />
+
+		<mapping class="com.entity.User" />
+
+		<mapping class="com.entity.PSetting" />
+		<mapping class="com.entity.Product" />
+		<mapping class="com.entity.PsProduct" />
+		<mapping class="com.entity.Staff" />
+		<mapping class="com.entity.WorkOrder" />
+		<mapping class="com.entity.NewProduct" />
+
+		<mapping class="com.entity.ReceiptComp" />
+		<mapping class="com.entity.DetailComp" />
+				<mapping class="com.entity.CloseTime" />
+				<mapping class="com.entity.Turn" />
+				<mapping class="com.entity.CoreWeight" />
+				<mapping class="com.entity.WeightElectricQueue" />
+								<mapping class="com.entity.ReturnWeightLog" />
+								<mapping class="com.entity.ReturnExcel" />
+								<mapping class="com.entity.ReturnWeightNumber" />
+	</session-factory>
+</hibernate-configuration> 

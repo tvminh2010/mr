@@ -1,0 +1,193 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+                           http://www.springframework.org/schema/tx
+                           http://www.springframework.org/schema/tx/spring-tx-3.1.xsd">
+
+	<!-- Configuring the data source bean for the entire system <bean id="dataSource" 
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource" destroy-method="close"> 
+		<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close"> 
+		<property name="driverClass" value="com.mysql.jdbc.Driver"/> <property name="jdbcUrl" 
+		value="jdbc:mysql://localhost:3306/tabuchi"/> <property name="user" value="root"/> 
+		<property name="password" value=""/> <property name="driverClass" value="net.sourceforge.jtds.jdbc.Driver"/> 
+		<property name="jdbcUrl" value="jdbc:jtds:sqlserver://DESKTOP-NTG2U49/tabuchi"/> 
+		<property name="user" value="sa"/> <property name="password" value="kuraki123"/> 
+		<property name="driverClassName" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/> 
+		<property name="url" value="jdbc:sqlserver://DESKTOP-NTG2U49/tabuchi"/> <property 
+		name="username" value="sa"/> <property name="password" value="kuraki123"/> 
+		</bean> -->
+ 	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
+		<property name="url"
+			value="jdbc:sqlserver://DESKTOP-0LL0PDT:1433;DatabaseName=qms;" />
+		<property name="username" value="sa" />
+		<property name="password" value="admin12345" />
+	</bean> 
+<!--  <bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
+		<property name="url"
+			value="jdbc:sqlserver://DESKTOP-0LL0PDT:1433;DatabaseName=qms;" />
+		<property name="username" value="sa1" />
+		<property name="password" value="admin12345" />
+	</bean>  -->
+	<bean id="improvedNamingStrategy" class="org.hibernate.cfg.ImprovedNamingStrategy" />
+
+	<!-- Configuring the session factory for hibernate -->
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<!-- Setting up the data source as defined in an external context file: 
+			applicationContext-jdbc.xml -->
+		<property name="dataSource" ref="dataSource" />
+        
+		<property name="annotatedClasses">
+			<list>
+
+				<value>com.entity.Product</value>
+				<value>com.entity.PsProduct</value>
+				<value>com.entity.Parts</value>
+				<value>com.entity.Shift</value>
+				<value>com.entity.LineNo</value>
+
+
+				<value>com.entity.Staff</value>
+
+
+				
+				<value>com.entity.User</value>
+				<value>com.entity.Role</value>
+
+			
+				<value>com.entity.NewProduct</value>
+				<value>com.entity.WorkOrder</value>
+				<value>com.entity.ReceiptComp</value>
+                <value>com.entity.DetailComp</value>
+                      <value>com.entity.CloseTime</value>
+                       <value>com.entity.Turn</value>
+                         <value>com.entity.CoreWeight</value>
+                          <value>com.entity.WeightElectricQueue</value>
+                          <value>com.entity.ReturnWeightLog</value>
+                      <value>com.entity.ReturnExcel</value>
+                         <value>com.entity.ReturnWeightNumber</value>
+			</list>
+		</property>
+
+		<!-- Setting the Hibernate config file path for linking up the entity POJOs -->
+		<property name="configLocation" value="/WEB-INF/hibernate.cfg.xml" />
+
+		<property name="hibernateProperties">
+			<props>
+				<!-- <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop> -->
+                <prop key="hibernate.dialect">org.hibernate.dialect.SQLServer2008Dialect</prop> 
+				<!-- <prop key="hibernate.dialect">org.hibernate.dialect.SQLServerDialect</prop> -->
+				<prop key="hibernate.show_sql">true</prop>
+			</props>
+		</property>
+
+		<property name="namingStrategy" ref="improvedNamingStrategy" />
+	</bean>
+	<!-- <bean id="sessionFactory1"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		Setting up the data source as defined in an external context file: 
+			applicationContext-jdbc.xml
+		<property name="dataSource" ref="dataSource1" />
+        
+		<property name="annotatedClasses">
+			<list>
+
+				<value>com.entity.Product</value>
+		
+
+
+
+</list>
+			
+		</property>
+
+		Setting the Hibernate config file path for linking up the entity POJOs
+		<property name="configLocation" value="/WEB-INF/hibernate1.cfg.xml" />
+
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+                <prop key="hibernate.dialect">org.hibernate.dialect.SQLServer2008Dialect</prop> 
+				<prop key="hibernate.dialect">org.hibernate.dialect.SQLServerDialect</prop>
+				<prop key="hibernate.show_sql">false</prop>
+			</props>
+		</property>
+
+		<property name="namingStrategy" ref="improvedNamingStrategy" />
+	</bean> -->
+	<bean id="ProductDao" class="com.impl.productImpl">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+
+	<bean id="WorkOrderDao" class="com.impl.WorkOrderImpl">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+
+
+	<bean id="UserDao" class="com.impl.userImpl">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+
+	<bean id="LineNoDao" class="com.impl.lineNoImpl">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="PsProductDao" class="com.impl.psproductImpl">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="ReceiptCompDao" class="com.impl.receiptCompImpl">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="DetailCompDao" class="com.impl.detailCompImpl">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+<bean id="TurnDao" class="com.impl.turnImpl">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="StaffDao" class="com.impl.staffImpl">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="RoleDao" class="com.impl.roleImpl">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+<bean id="CloseTimeDao" class="com.impl.CloseTimeImpl">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="NewProductDao" class="com.impl.newproductImpl">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+		<bean id="CoreWeigthDao" class="com.impl.CoreWeightImpl">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	
+		<bean id="WeightElectricQueueDao" class="com.impl.WeightElectricQueueImpl">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="ReturnWeightLogDao" class="com.impl.ReturnWeightLogImpl">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+		<bean id="ReturnExcelDao" class="com.impl.ReturnExcelImpl">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	
+	<bean id="ReturnWeightNumberDao" class="com.impl.NumberCoreImpl">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<tx:annotation-driven />
+</beans>
