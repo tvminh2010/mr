@@ -4,9 +4,11 @@ import java.awt.print.PrinterJob;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -170,7 +172,7 @@ public class AjaxController {
 		}else{
 			rc = wosv.getReceiptUpdatebyWo(woid);
 			if(closetimeid==null){
-				rc.setClosetime(cldao.getNextTime());
+				rc.setClosetime(cldao.getNextTime(new Time(Calendar.getInstance().getTime().getTime())));
 			}else{
 			rc.setClosetime(cldao.getById(closetimeid));
 		     }

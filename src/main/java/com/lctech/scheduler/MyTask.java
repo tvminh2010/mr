@@ -4,6 +4,8 @@ package com.lctech.scheduler;
 
 
 
+import java.sql.Time;
+import java.util.Calendar;
 import java.util.Date;
 
 import org.apache.log4j.Logger;
@@ -40,11 +42,18 @@ public class MyTask  implements Runnable {
 	public void run() {
 		logger.info("Task: "+ new Date());
 		//CloseTime lnt = ctdao.getNextTime();
-		CloseTime lntc = ctdao.getCurrentTime();
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		CloseTime lntc = ctdao.getCurrentTime(new Time(Calendar.getInstance().getTime().getTime()-10000));
 		closewo.closeworkorder(lntc);
 	
 		this.template.convertAndSend("/topic/greetings","");
 		
 	}
+	
 	
 }

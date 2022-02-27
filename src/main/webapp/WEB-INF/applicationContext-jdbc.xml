@@ -21,9 +21,9 @@
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
 		<property name="url"
-			value="jdbc:sqlserver://DESKTOP-0LL0PDT:1433;DatabaseName=qms;" />
+			value="jdbc:sqlserver://DESKTOP-K3J0GP9:1433;DatabaseName=mr12;" />
 		<property name="username" value="sa" />
-		<property name="password" value="admin12345" />
+		<property name="password" value="admin123@" />
 	</bean> 
 <!--  <bean id="dataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">

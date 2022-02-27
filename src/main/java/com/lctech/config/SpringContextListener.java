@@ -2,6 +2,9 @@ package com.lctech.config;
 
 
 
+import java.sql.Date;
+import java.sql.Time;
+import java.util.Calendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +12,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
@@ -19,6 +23,7 @@ import com.dao.WeightElectricQueueDao;
 import com.entity.CloseTime;
 import com.lctech.scheduler.ScheduledTasks;
 import com.lctech.service.CloseTimeService;
+import com.lctech.service.CloseWorkOrder;
 
 
 
@@ -30,6 +35,12 @@ public class SpringContextListener implements ApplicationListener<ContextRefresh
 	private ApplicationContext appContext;
 	@Autowired
 	private CloseTimeService cts;
+	 @Autowired
+	 private SimpMessagingTemplate template;
+	 @Autowired
+	 private  CloseWorkOrder closewo;
+	 @Autowired
+	 private  CloseTimeDao ctdao;
 	@Autowired
 	private WeightElectricQueueDao weqdao;
 	 /* @Bean
@@ -54,6 +65,9 @@ public class SpringContextListener implements ApplicationListener<ContextRefresh
 	        
 	        List<String> lcron = cts.getCron();
 	        scheduledTasks.scheduleAllCrons(lcron);
+	        
+//	        CloseTime lntc = ctdao.getNextTime(new Time(Calendar.getInstance().getTime().getTime()));
+//			closewo.closeworkorder(lntc);
 	        
 		}
 	

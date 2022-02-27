@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Comparator;
 
@@ -156,8 +157,12 @@ public class MainController {
 			   @RequestParam(value = "error",required = false) Integer error,
 			   @RequestParam(value = "msg",required = false) Integer msg)  {
 		  try{
-			  CloseTime lntc = ctdao.getNextTime();
+			  
+			  
+			  CloseTime lntc = ctdao.getNextTime(new Time(Calendar.getInstance().getTime().getTime()));
 			  closewo.closeworkorder(lntc);
+			  
+			  
 		  }catch(Exception e){
 			   logger.info(e.toString());
 			  return "redirect:/listycnvl?error=3";

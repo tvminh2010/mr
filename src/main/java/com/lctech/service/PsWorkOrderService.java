@@ -1,6 +1,8 @@
 package com.lctech.service;
 
+import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -137,7 +139,7 @@ public class PsWorkOrderService {
 		 ldc.add(dc);
 		 
 		}
-		CloseTime lnt = ctdao.getNextTime();
+		CloseTime lnt = ctdao.getNextTime(new Time(Calendar.getInstance().getTime().getTime()));
 		if(rc.getClosetime()==null){
 			rc.setClosetime(lnt);
 		}
@@ -212,7 +214,7 @@ public class PsWorkOrderService {
 		 ldc.add(dc);
 		 
 		}
-		CloseTime lnt = ctdao.getNextTime();
+		CloseTime lnt = ctdao.getNextTime(new Time(Calendar.getInstance().getTime().getTime()));
 		if(rc.getClosetime()==null){
 			rc.setClosetime(lnt);
 		}

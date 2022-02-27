@@ -1,7 +1,9 @@
 package com.controller;
 
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -107,7 +109,7 @@ public class LineController {
 		model.addAttribute("typebs", TypeComp.RequestBS);
 		model.addAttribute("typesetreturn", TypeComp.Return);
 
-		CloseTime lnt = ctdao.getNextTime();
+		CloseTime lnt = ctdao.getNextTime(new Time(Calendar.getInstance().getTime().getTime()));
 		model.addAttribute("timeclose", lnt);
 		return "yeucauNVL";
 	}
