@@ -74,128 +74,245 @@ public class LineController {
 	@Autowired
 	private UserDao usdao;
 	@Autowired
-	private Config config;
-	@Autowired
-	private CloseTimeDao ctdao;
-	@Autowired
-	private PsWorkOrderService pswoservice;
 
+	   private Config config;
+	 @Autowired
+	 private  CloseTimeDao ctdao;
+	 @Autowired
+	private  PsWorkOrderService pswoservice;
 	@RequestMapping(method = RequestMethod.GET)
-	public String home(Model model, @RequestParam(value = "id", required = false) String id,
-			@RequestParam(value = "woid", required = false) String woid,
-			@RequestParam(value = "error", required = false) Integer error,
-			@RequestParam(value = "msg", required = false) Integer msg) {
-		logger.info("yeucauNVL");
-
-		ReceiptComp rc = new ReceiptComp();
-		List<ReceiptComp> lrc = new ArrayList<ReceiptComp>();
-		if (woid != null) {
-			rc = pswoservice.getReceiptUpdatebyWo(woid);
-			lrc = rcdao.getbyIsPendingWaitWOid(woid);
-
-		}
-		if (id != null) {
-			rc = pswoservice.getReceiptUpdate(id);
-			lrc = rcdao.getbyIsPendingWaitWOid(rc.getWo().getId());
-
-		}
-		model.addAttribute("rc", rc);
-		model.addAttribute("lrc", lrc);
-		model.addAttribute("error", error);
-		model.addAttribute("msg", msg);
-		model.addAttribute("listline", lndao.getlistLineNo());
-		model.addAttribute("lclosetime", ctdao.getList());
-		model.addAttribute("typesetup", TypeComp.RequestSetup);
-		model.addAttribute("typebs", TypeComp.RequestBS);
-		model.addAttribute("typesetreturn", TypeComp.Return);
-
-		CloseTime lnt = ctdao.getNextTime(new Time(Calendar.getInstance().getTime().getTime()));
-		model.addAttribute("timeclose", lnt);
-		return "yeucauNVL";
+	public String  home(Model model ,@RequestParam(value="id",required =false) String id,
+			@RequestParam(value="woid",required =false) String woid,
+			   @RequestParam(value = "error",required = false) Integer error,
+			   @RequestParam(value = "msg",required = false) Integer msg){
+	     	logger.info("yeucauNVL");
+         
+	        ReceiptComp rc = new ReceiptComp();
+	        List<ReceiptComp> lrc = new ArrayList<ReceiptComp>();
+	        if(woid!=null){
+	        	rc = pswoservice.getReceiptUpdatebyWo(woid);
+	        	lrc= rcdao.getbyIsPendingWaitWOid(woid);
+	  		   
+	        }
+	        if(id!=null){
+	        	rc = pswoservice.getReceiptUpdate(id);
+	        	lrc= rcdao.getbyIsPendingWaitWOid(rc.getWo().getId());
+	  		   
+	        }
+	        model.addAttribute("rc", rc);
+	        model.addAttribute("lrc", lrc);
+	        model.addAttribute("error", error);
+	        model.addAttribute("msg", msg);
+		    model.addAttribute("listline", lndao.getlistLineNo());
+		    model.addAttribute("lclosetime", ctdao.getList());
+		    model.addAttribute("typesetup", TypeComp.RequestSetup);
+		    model.addAttribute("typebs", TypeComp.RequestBS);
+		    model.addAttribute("typesetreturn", TypeComp.Return);
+		  
+		    CloseTime lnt = ctdao.getNextTime(new Time(Calendar.getInstance().getTime().getTime()));
+		    model.addAttribute("timeclose", lnt);
+			return "yeucauNVL"; 
 	}
-
-	@RequestMapping(value = "yeucauNVL", method = RequestMethod.POST)
-	public String yeucauNVLPost(Model model, @ModelAttribute("rc") ReceiptComp rc) {
-
-		int i = 0; 
+	  @RequestMapping(value="yeucauNVL",method = RequestMethod.POST)
+	   public String yeucauNVLPost(Model model,
+			   @ModelAttribute("rc")ReceiptComp rc)  {
+		 
+		  int i=0;
+		  WorkOrder wo = wodao.getWObyId(rc.getWo().getId());
+		  for(DetailComp dc:rc.getlDetailComp()){
+			  if(dc.getQty() != null && dc.getQty()>0){
+				 i++;
+			  }
+		  }
+		  if(i>0){
+		  
+		  User us = usdao.getUserByName(getPrincipal());
+	     if(wo.getStatus()==1){
+	    	  rc.setType(TypeComp.RequestSetup);
+	      }else{
+	    	  rc.setType(TypeComp.RequestBS);
+	      }
+	      
+		  rc.setWo(wo);
+		  rc.setUs(us);
 		
-		//logger.info("yeucauNVLPost   type: " + rc.getType().getType());
-		//logger.info("yeucauNVLPost turn:" + rc.getTurn().getD() );
-
-		WorkOrder wo = wodao.getWObyId(rc.getWo().getId());
-		for (DetailComp dc : rc.getlDetailComp()) {
-			if (dc.getQty() != null && dc.getQty() > 0) {
-				i++;
-			}
-		}
-		logger.info("i="+ i);
-		if (i > 0) {
+		  if(wo.getStatus()==1){
+			  wo.setStatus(2);
+		  }
+		  rc.setDate(new Timestamp(new Date().getTime()));
+		 
+			  rc.setIsWait(true);
+	     Boolean update = false;
+		  if(rc.getId()==null || rc.getId().equalsIgnoreCase("") || rc.getId()=="null" ){
+			  //update
+			  ReceiptComp lrc = rcdao.getbyClosetimeWoWait(rc.getWo().getId(),rc.getClosetime().getId(),true);
+			  if(lrc!=null && lrc.getId()!=null){
+				  return "redirect:/yeucauNVL/input?error=7";
+				}
+			  String id = UUID.randomUUID().toString();
+			  rc.setId(id);
+		  }else{
+			  update = true;
+		  }
+		 // wodao.save(wo);
+		  rcdao.save(rc);
+		  for(DetailComp dc:rc.getlDetailComp()){
+			   //if(dc.getQty() != null && dc.getQty()>0){
+			  if(dc.getId()==null || dc.getId().equalsIgnoreCase("") || dc.getId()=="null" ){
+			  String dcid = UUID.randomUUID().toString();
+			  dc.setId(dcid);
+			  }
+			  dc.setReceipt(new ReceiptComp(rc.getId()));
+			  dc.setModel(pdao.getProductById(dc.getModel().getPt_part()));
+			  dc.setQty(dc.getQty() == null?0:dc.getQty());
+			  dcdao.save(dc);
+			   
+			  // }
+			   
+		  }
 		
-			User us = usdao.getUserByName(getPrincipal());
-			if (wo.getStatus() == 1) {
-				rc.setType(TypeComp.RequestSetup);
-			} else {
-				rc.setType(TypeComp.RequestBS);
-			}
-
-			rc.setWo(wo);
-			rc.setUs(us);
-
-			if (wo.getStatus() == 1) {
-				wo.setStatus(2);
-			}
-			rc.setDate(new Timestamp(new Date().getTime()));
-
-			rc.setIsWait(true);
-			Boolean update = false;
-			if (rc.getId() == null || rc.getId().equalsIgnoreCase("") || rc.getId() == "null") {
-				// update
-				ReceiptComp lrc = rcdao.getbyClosetimeWoWait(rc.getWo().getId(), rc.getClosetime().getId(), true);
-				if (lrc != null && lrc.getId() != null) {
-					return "redirect:/yeucauNVL/input?error=7";
-				}
-				String id = UUID.randomUUID().toString();
-				rc.setId(id);
-			} else {
-				update = true;
-			}
-			// wodao.save(wo);
-			rcdao.save(rc);
-			for (DetailComp dc : rc.getlDetailComp()) {
-				// if(dc.getQty() != null && dc.getQty()>0){
-				if (dc.getId() == null || dc.getId().equalsIgnoreCase("") || dc.getId() == "null") {
-					String dcid = UUID.randomUUID().toString();
-					dc.setId(dcid);
-				}
-				dc.setReceipt(new ReceiptComp(rc.getId()));
-				dc.setModel(pdao.getProductById(dc.getModel().getPt_part()));
-				dc.setQty(dc.getQty() == null ? 0 : dc.getQty());
-				dcdao.save(dc);
-
-				// }
-
-			}
-
-			// return "yeucauNVL"; ok
-
-			if (!update) {
-				return "redirect:/yeucauNVL/input?id=" + rc.getId() + "&msg=1";
-			} else {
-				return "redirect:/yeucauNVL/input?id=" + rc.getId() + "&msg=2";
-			}
-		} else {
-			logger.info("ko co NVL naof dc nhap");
-			if (rc.getId() != null && !rc.getId().equalsIgnoreCase("") && rc.getId() != "null") {
-
-				ReceiptComp rc1 = rcdao.getbyId(rc.getId());
-				logger.info("delrcid rcid= " + rc.getId());
-				rcdao.delete(rc1);
-			}
-			return "redirect:/yeucauNVL/input?woid=" + wo.getId() + "&msg=3";
-		}
-
-	}
-
+	      //return "yeucauNVL"; ok
+		
+		  if(!update){
+			  
+			  return "redirect:/yeucauNVL/input?id="+rc.getId()+"&msg=1";
+		  }else{
+			  return "redirect:/yeucauNVL/input?id="+rc.getId()+"&msg=2";
+		  }
+		  }else{
+			  
+			  if(rc.getId()!=null && !rc.getId().equalsIgnoreCase("") && rc.getId()!="null" ){
+				  ReceiptComp rc1 = rcdao.getbyId(rc.getId());
+				  rcdao.delete(rc1);
+			  }
+			  return "redirect:/yeucauNVL/input?woid="+wo.getId()+"&msg=3";
+		  }
+		 
+	 }
+	
+//	private Config config;
+//	@Autowired
+//	private CloseTimeDao ctdao;
+//	@Autowired
+//	private PsWorkOrderService pswoservice;
+//
+//
+//	@RequestMapping(method = RequestMethod.GET)
+//	public String home(Model model, @RequestParam(value = "id", required = false) String id,
+//			@RequestParam(value = "woid", required = false) String woid,
+//			@RequestParam(value = "error", required = false) Integer error,
+//			@RequestParam(value = "msg", required = false) Integer msg) {
+//		logger.info("yeucauNVL");
+//
+//		ReceiptComp rc = new ReceiptComp();
+//		List<ReceiptComp> lrc = new ArrayList<ReceiptComp>();
+//		if (woid != null) {
+//			rc = pswoservice.getReceiptUpdatebyWo(woid);
+//			lrc = rcdao.getbyIsPendingWaitWOid(woid);
+//
+//		}
+//		if (id != null) {
+//			rc = pswoservice.getReceiptUpdate(id);
+//			lrc = rcdao.getbyIsPendingWaitWOid(rc.getWo().getId());
+//
+//		}
+//		model.addAttribute("rc", rc);
+//		model.addAttribute("lrc", lrc);
+//		model.addAttribute("error", error);
+//		model.addAttribute("msg", msg);
+//		model.addAttribute("listline", lndao.getlistLineNo());
+//		model.addAttribute("lclosetime", ctdao.getList());
+//		model.addAttribute("typesetup", TypeComp.RequestSetup);
+//		model.addAttribute("typebs", TypeComp.RequestBS);
+//		model.addAttribute("typesetreturn", TypeComp.Return);
+//
+//		CloseTime lnt = ctdao.getNextTime();
+//		model.addAttribute("timeclose", lnt);
+//		return "yeucauNVL";
+//	}
+//
+//	@RequestMapping(value = "yeucauNVL", method = RequestMethod.POST)
+//	public String yeucauNVLPost(Model model, @ModelAttribute("rc") ReceiptComp rc) {
+//
+//		int i = 0; 
+//		
+//		//logger.info("yeucauNVLPost   type: " + rc.getType().getType());
+//		//logger.info("yeucauNVLPost turn:" + rc.getTurn().getD() );
+//
+//		WorkOrder wo = wodao.getWObyId(rc.getWo().getId());
+//		for (DetailComp dc : rc.getlDetailComp()) {
+//			if (dc.getQty() != null && dc.getQty() > 0) {
+//				i++;
+//			}
+//		}
+//		logger.info("i="+ i);
+//		if (i > 0) {
+//		
+//			User us = usdao.getUserByName(getPrincipal());
+//			if (wo.getStatus() == 1) {
+//				rc.setType(TypeComp.RequestSetup);
+//			} else {
+//				rc.setType(TypeComp.RequestBS);
+//			}
+//
+//			rc.setWo(wo);
+//			rc.setUs(us);
+//
+//			if (wo.getStatus() == 1) {
+//				wo.setStatus(2);
+//			}
+//			rc.setDate(new Timestamp(new Date().getTime()));
+//
+//			rc.setIsWait(true);
+//			Boolean update = false;
+//			if (rc.getId() == null || rc.getId().equalsIgnoreCase("") || rc.getId() == "null") {
+//				// update
+//				ReceiptComp lrc = rcdao.getbyClosetimeWoWait(rc.getWo().getId(), rc.getClosetime().getId(), true);
+//				if (lrc != null && lrc.getId() != null) {
+//					return "redirect:/yeucauNVL/input?error=7";
+//				}
+//				String id = UUID.randomUUID().toString();
+//				rc.setId(id);
+//			} else {
+//				update = true;
+//			}
+//			// wodao.save(wo);
+//			rcdao.save(rc);
+//			for (DetailComp dc : rc.getlDetailComp()) {
+//				// if(dc.getQty() != null && dc.getQty()>0){
+//				if (dc.getId() == null || dc.getId().equalsIgnoreCase("") || dc.getId() == "null") {
+//					String dcid = UUID.randomUUID().toString();
+//					dc.setId(dcid);
+//				}
+//				dc.setReceipt(new ReceiptComp(rc.getId()));
+//				dc.setModel(pdao.getProductById(dc.getModel().getPt_part()));
+//				dc.setQty(dc.getQty() == null ? 0 : dc.getQty());
+//				dcdao.save(dc);
+//
+//				// }
+//
+//			}
+//
+//			// return "yeucauNVL"; ok
+//
+//			if (!update) {
+//				return "redirect:/yeucauNVL/input?id=" + rc.getId() + "&msg=1";
+//			} else {
+//				return "redirect:/yeucauNVL/input?id=" + rc.getId() + "&msg=2";
+//			}
+//		} else {
+//			logger.info("ko co NVL naof dc nhap");
+//			if (rc.getId() != null && !rc.getId().equalsIgnoreCase("") && rc.getId() != "null") {
+//
+//				ReceiptComp rc1 = rcdao.getbyId(rc.getId());
+//				logger.info("delrcid rcid= " + rc.getId());
+//				rcdao.delete(rc1);
+//			}
+//			return "redirect:/yeucauNVL/input?woid=" + wo.getId() + "&msg=3";
+//		}
+//
+//	}
+//
 	private String getPrincipal() {
 		String userName = null;
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();

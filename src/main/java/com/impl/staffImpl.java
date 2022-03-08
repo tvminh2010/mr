@@ -73,8 +73,8 @@ public class staffImpl implements StaffDao{
 	@Override
 	public void insert(Staff staff) {
 		try {
-			staff.setFirstName(new String(staff.getFirstName().getBytes("UTF-8"), "UTF-8"));
-			staff.setLastName(new String(staff.getLastName().getBytes("UTF-8"), "UTF-8"));
+			staff.setFirstName(new String(staff.getFirstName().getBytes("iso-8859-1"), "UTF-8"));
+			staff.setLastName(new String(staff.getLastName().getBytes("iso-8859-1"), "UTF-8"));
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			logger.info(e);
@@ -87,8 +87,8 @@ public class staffImpl implements StaffDao{
 	@Override
 	public void update(Staff staff) {
 		try {
-			staff.setFirstName(new String(staff.getFirstName().getBytes("UTF-8"), "UTF-8"));
-			staff.setLastName(new String(staff.getLastName().getBytes("UTF-8"), "UTF-8"));
+			staff.setFirstName(new String(staff.getFirstName().getBytes("iso-8859-1"), "UTF-8"));
+			staff.setLastName(new String(staff.getLastName().getBytes("iso-8859-1"), "UTF-8"));
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			logger.info(e);

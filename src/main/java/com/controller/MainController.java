@@ -157,12 +157,8 @@ public class MainController {
 			   @RequestParam(value = "error",required = false) Integer error,
 			   @RequestParam(value = "msg",required = false) Integer msg)  {
 		  try{
-			  
-			  
 			  CloseTime lntc = ctdao.getNextTime(new Time(Calendar.getInstance().getTime().getTime()));
 			  closewo.closeworkorder(lntc);
-			  
-			  
 		  }catch(Exception e){
 			   logger.info(e.toString());
 			  return "redirect:/listycnvl?error=3";

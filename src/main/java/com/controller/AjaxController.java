@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -112,7 +113,7 @@ public class AjaxController {
 	}
 	@RequestMapping(value = "/api/selectbx", method = RequestMethod.GET)
 	public @ResponseBody List<WorkOrder> selectlinebx(@RequestParam Integer lineid){
-		logger.info("selectline 2");
+		//logger.info("selectline 2");
 		List<WorkOrder> lwo = new ArrayList<WorkOrder>();
 	    lwo = wodao.getListWorkOrderByLineStatusIsBx(lineid);
 		return lwo;
@@ -146,7 +147,7 @@ public class AjaxController {
 	@RequestMapping(value = "/api/selectrcid2", method = RequestMethod.GET)
 	public @ResponseBody ReceiptComp model2(@RequestParam(value = "rcid", required = false) String rcid
 			,@RequestParam(value = "woid", required = false) String woid){
-		logger.info("selectmodel" +woid );
+		logger.info("selectmodel " +woid );
 		ReceiptComp rc = new ReceiptComp();
 	
 		rc = wosv.collectShareCoreWeight(woid);
@@ -154,7 +155,7 @@ public class AjaxController {
 	}
 	@RequestMapping(value = "/api/selectwoid", method = RequestMethod.GET)
 	public @ResponseBody List<ReceiptComp> selectwoid(@RequestParam String woid){
-		logger.info("selectwoid" +woid );
+		logger.info("selectwoid " +woid );
 		
 		List<ReceiptComp> lrc = rcdao.getbyIsPendingWaitWOid(woid);
 		//logger.info("lrc" +lrc.get(0).getWo().getId() );
@@ -221,19 +222,25 @@ public class AjaxController {
 		response.getWriter().write(json.toString());
 	}
 	@RequestMapping(value = {"/api/getSerial"}, method = RequestMethod.GET)
-	public void getapiSerial(HttpServletResponse response, @RequestParam(value="serial", required=true) String serial) throws IOException{
+	public void getapiSerial(HttpServletResponse response, @RequestParam(value="serial", required=true) String serial) throws IOException, ParseException{
 		JSONObject json = new JSONObject();
 	//	logger.info("api getserial" + serial);
 		HashMap<String,String> item = posgressConn.getItemCode(serial);
 		if(item != null && item.size()>1) {
 	     String itemcode  = item.get("masp");
-		Product p = pdao.getProductById(itemcode);
-		//logger.info("api product" + p.toString());
+		//Product p = pdao.getProductById(itemcode+"f");
+	     Product p = pdao.getProductById(itemcode);
+		logger.info("api product" + p.getPt_part());
 		
 		 List<Object[]> listcoreweight = crdao.getTypeCore();
 		
 		CoreWeight cw = crdao.getByItemcode(itemcode);
-		logger.info(item.get("lotno"));
+		SimpleDateFormat formatinput = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat formatoutput = new SimpleDateFormat("dd/MM/yyyy");
+		Date inputd = formatinput.parse(item.get("receivingdate"));
+		logger.info("receivingdate:" + inputd);
+		logger.info("receivingdate ouput :" + formatoutput.format(inputd));
+		
 
 		json.put("result", "1");
 		json.put("pt_part", p.getPt_part());
@@ -246,6 +253,7 @@ public class AjaxController {
 		json.put("typecore",cw.getTypecore());
 		json.put("rate",cw.getRate()==null || cw.getRate()==0 ? 1 :cw.getRate());
 		json.put("listcoreweight",listcoreweight);
+		json.put("receivingdate",formatoutput.format(inputd));
 		}else {
 			
 			json.put("result", "0");
@@ -355,6 +363,7 @@ public class AjaxController {
           hmParams.put("lotno", rwl.getLotno());
           hmParams.put("unit", rwl.getPtum());
           hmParams.put("vendor", rwl.getVendor());
+   
           
 	     String dirJasper1 =config.getReturnJasper();
 	     String printerName = config.getPrinterName();
@@ -484,6 +493,7 @@ public class AjaxController {
 			 @RequestParam(value="partname", required=true) String partname,
 			 @RequestParam(value="partnumber", required=true) String partnumber,
 			 @RequestParam(value="lotno", required=false) String lotno,
+			 @RequestParam(value="receivingdate", required=false) String receivingdate,
 			 @RequestParam(value="copies", required=false) Double copies) throws IOException{
 		logger.info("excutePrint");
 		if(copies == null ) {
@@ -514,10 +524,7 @@ public class AjaxController {
           
           
           //save log
-          
-        
-          
-       
+
           
           hmParams.put("weight", qty);
           hmParams.put("SerialNo", serial);
@@ -640,6 +647,7 @@ public class AjaxController {
 	           rwl.setWoname(woname);
 	           rwl.setPtdesc2(partname);
 	           rwl.setVendor(vendor);
+	           rwl.setReceivingdate(receivingdate);
 	           rwldao.save(rwl);
 	           logger.info("save rwl "+rwl.toString() );
 	          }

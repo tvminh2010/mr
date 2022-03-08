@@ -41,19 +41,19 @@ public class MyTask  implements Runnable {
 	@Override
 	public void run() {
 		logger.info("Task: "+ new Date());
-		//CloseTime lnt = ctdao.getNextTime();
+		
 		try {
 			Thread.sleep(5000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		CloseTime lntc = ctdao.getCurrentTime(new Time(Calendar.getInstance().getTime().getTime()-10000));
+		logger.info("Task time run : "+ new Time(Calendar.getInstance().getTime().getTime()));
+		CloseTime lntc = ctdao.getCurrentTime(new Time(Calendar.getInstance().getTime().getTime()));
 		closewo.closeworkorder(lntc);
 	
 		this.template.convertAndSend("/topic/greetings","");
 		
 	}
-	
 	
 }

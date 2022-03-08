@@ -53,9 +53,8 @@ public class receiptCompImpl implements ReceiptCompDao{
 	@Override
 	public List<ReceiptComp> getbyIsWait(Boolean iswait) {
 		Session session = this.sessionFactory.getCurrentSession();
-		Query query =  session.createQuery("from ReceiptComp where isWait = :iswait and type <> " + TypeComp.Delete.getType() + "  order by date desc" );
+		Query query =  session.createQuery("from ReceiptComp where isWait = :iswait and type <> " + TypeComp.Delete.getType() );
 		query.setParameter("iswait", iswait);
-		query.setMaxResults(100);
 		List<ReceiptComp> list = (List<ReceiptComp>)query.list();
 		return list;
 	}

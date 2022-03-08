@@ -40,6 +40,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.hibernate.SessionFactory;
 import org.jfree.util.Log;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -57,6 +58,7 @@ import com.config.Config;
 import com.entity.DetailComp;
 import com.entity.Product;
 import com.entity.ReceiptComp;
+import com.entity.ReturnExcel;
 import com.entity.ReturnWeightLog;
 import com.entity.Turn;
 import com.entity.TypeComp;
@@ -79,18 +81,23 @@ public class ExportExcel {
 	private ReportsServive reportsServive;
 	@Autowired
 	private ReturnWeightLogDao rwldao;
-	
+	@Autowired
+	private ApplicationContext appContext;
+	@Autowired
+	ServletContext servletContext;
 	  @Autowired
 		 private CoreWeightDao cwdao;
 	  @Autowired
 		 private ProductDao pdao;
 	public XSSFWorkbook   exportReturn(WorkOrder  wo,HttpServletRequest req) {
-		
+		logger.info("wo " + wo.toString());
 		List<ReturnWeightLog> lrw = rwldao.getReturnWeightLogBywoid(wo.getId());
-		//String userDir = System.getProperty("user.dir");
-		ServletContext context = req.getServletContext();
-        String appPath = context.getRealPath("");
+		String userDir = System.getProperty("user.dir");
+		//ServletContext context = req.getServletContext();
+	        String appPath = servletContext.getRealPath("");
+
 		String filePathToBeServed = appPath +"/data/Formlabel.xlsx" ;
+		logger.info("filePathToBeServed " + filePathToBeServed);
         File file = new File(filePathToBeServed);
 		 //File file = new File(fileName);
          FileInputStream fin = null;  
@@ -110,7 +117,7 @@ public class ExportExcel {
                  XSSFSheet sheet = workbook.getSheetAt(0);
                  sheet.getRow(2).getCell(1).setCellValue(wo.getModel().getPt_desc1());
                  sheet.getRow(1).getCell(4).setCellValue(wo.getLine().getName());
-                 sheet.getRow(2).getCell(4).setCellValue(getPrincipal());
+                 sheet.getRow(2).getCell(4).setCellValue("");
                  sheet.getRow(2).getCell(5).setCellValue(dat);
                  sheet.getRow(1).createCell(1).setCellValue(""+wo.getName());
                  XSSFCellStyle style=workbook.createCellStyle();
@@ -143,6 +150,9 @@ public class ExportExcel {
     	    			XSSFCell cell6 =  sheet.getRow(rowCount).createCell(6);
     	    			cell6.setCellValue(rwl.getPtum());
     	    			cell6.setCellStyle(style);
+    	    			XSSFCell cell7 =  sheet.getRow(rowCount).createCell(7);
+    	    			cell7.setCellValue(rwl.getReceivingdate());
+    	    			cell7.setCellStyle(style);
     	    			
     	                // sheet.getRow(rowCount).createCell(2).setCellValue(rwl.getPtdesc1());
     	                 //sheet.getRow(rowCount).createCell(3).setCellValue(rwl.getLotno());
@@ -158,7 +168,7 @@ public class ExportExcel {
                 sheet1.getRow(1).getCell(0).setCellValue("WO: " + wo.getName());
                 sheet1.getRow(1).getCell(3).setCellValue("Line: " +wo.getLine().getName());
                 sheet1.getRow(2).getCell(3).setCellValue("Model: " +wo.getModel().getPt_desc1());
-                sheet1.getRow(1).getCell(7).setCellValue(getPrincipal());
+                sheet1.getRow(1).getCell(7).setCellValue("");
                 sheet1.getRow(2).getCell(7).setCellValue(dat);
 				List<Object[][]> lrw1 = rwldao.getReturnWeightLogBywoidOrderbyNVL(wo.getId());
 
@@ -193,9 +203,18 @@ public class ExportExcel {
 		    	for(ReturnWeightLog rwl : lrw) {
 		    		      rwldao.updateStatus(rwl.getId());
 		    	}
-		    
+			    String filename =  "RETURN"+"_"+wo.getName() +"_"+simpleDateFormat.format(new Date());
 		    	
-        	
+		    	try {
+		        	FileOutputStream fos = new FileOutputStream("D:/a.xlsx");
+					workbook.write(fos);
+					
+					
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					logger.info(e);
+					e.printStackTrace();
+				}
          
 	    	return workbook;
 	}
@@ -346,7 +365,7 @@ public class ExportExcel {
 			e.printStackTrace();
 		}
 	}
-	@SuppressWarnings("deprecation")
+	
 	public void exportTurnSetup(String turn,CloseTime lnt){
 		logger.info("exportTurn ");
 		TypeComp type = TypeComp.RequestSetup;

@@ -1,6 +1,5 @@
 package com.impl;
 
-import java.sql.Date;
 import java.sql.Time;
 import java.util.List;
 
@@ -72,11 +71,14 @@ private MyTask myTask;
 		
 		return list;
 	}
+	
+
+	
 	@Override
-	public CloseTime getNextTime() {
+	public CloseTime getNextTime(Time d) {
 		Session session = this.sessionFactory.getCurrentSession();	
 		Query query = session.createQuery("from CloseTime ct "
-				+" where DATEDIFF(N,CONVERT(VARCHAR(5),getdate(),108) ,closetime)>0 order by DATEDIFF(N,CONVERT(VARCHAR(5),getdate(),108) ,closetime)   ");
+				+" where DATEDIFF(N,'"+d+"' ,closetime)>0 order by DATEDIFF(N,'"+d+"' ,closetime) asc  ");
 		List<CloseTime> list = (List<CloseTime>) query.list();
 		if(list.isEmpty()){
 			Query query1 = session.createQuery("from CloseTime ct order by ct.closetime asc ");
@@ -87,12 +89,28 @@ private MyTask myTask;
 		}
 	
 	}
-	
+
 	@Override
-	public CloseTime getNextTime(Time d) {
+	public CloseTime getCurrentTime(Time d) {
 		Session session = this.sessionFactory.getCurrentSession();	
 		Query query = session.createQuery("from CloseTime ct "
-				+" where DATEDIFF(N,'"+d+"' ,closetime)>0 order by DATEDIFF(N,'"+d+"' ,closetime) asc  ");
+				+" where DATEDIFF(N,'"+d+"' ,closetime)<=0 order by DATEDIFF(N,'"+d+"',closetime) desc  ");
+		
+		logger.info(query);
+		List<CloseTime> list = (List<CloseTime>) query.list();
+		if(list.isEmpty()){
+			Query query1 = session.createQuery("from CloseTime ct order by ct.closetime desc ");
+			CloseTime nexttime = (CloseTime) query1.setMaxResults(1).list().get(0);
+			return nexttime;
+		}else{
+			return list.get(0);
+		}
+	}
+	@Override
+	public CloseTime getNextTime() {
+		Session session = this.sessionFactory.getCurrentSession();	
+		Query query = session.createQuery("from CloseTime ct "
+				+" where DATEDIFF(N,CONVERT(VARCHAR(5),getdate(),108) ,closetime)>0 order by DATEDIFF(N,CONVERT(VARCHAR(5),getdate(),108) ,closetime)   ");
 		List<CloseTime> list = (List<CloseTime>) query.list();
 		if(list.isEmpty()){
 			Query query1 = session.createQuery("from CloseTime ct order by ct.closetime asc ");
@@ -137,22 +155,6 @@ private MyTask myTask;
 		Session session = this.sessionFactory.getCurrentSession();	
 		Query query = session.createQuery("from CloseTime ct "
 				+" where DATEDIFF(N,CONVERT(VARCHAR(5),getdate(),108) ,closetime)<=0 order by DATEDIFF(N,CONVERT(VARCHAR(5),getdate(),108) ,closetime) desc  ");
-		List<CloseTime> list = (List<CloseTime>) query.list();
-		if(list.isEmpty()){
-			Query query1 = session.createQuery("from CloseTime ct order by ct.closetime desc ");
-			CloseTime nexttime = (CloseTime) query1.setMaxResults(1).list().get(0);
-			return nexttime;
-		}else{
-			return list.get(0);
-		}
-	}
-	
-	
-	@Override
-	public CloseTime getCurrentTime(Time d) {
-		Session session = this.sessionFactory.getCurrentSession();	
-		Query query = session.createQuery("from CloseTime ct "
-				+" where DATEDIFF(N,'"+d+"' ,closetime)<=0 order by DATEDIFF(N,'"+d+"',closetime) desc  ");
 		List<CloseTime> list = (List<CloseTime>) query.list();
 		if(list.isEmpty()){
 			Query query1 = session.createQuery("from CloseTime ct order by ct.closetime desc ");

@@ -108,9 +108,9 @@ public class ImportDetailComp {
 						}
 					logger.info("wo:"+wo.toString());
 					int k=0;
-					logger.info("listwo:"+listwo.size());
+					//logger.info("listwo:"+listwo.size());
 					while(listwo.size()!=0 && k<listwo.size() ){
-						logger.info("listwojjj:"+wo.getId() +"_"+listwo.get(k).getId()) ;
+						//logger.info("listwojjj:"+wo.getId() +"_"+listwo.get(k).getId()) ;
 						if(wo.getId().equalsIgnoreCase(listwo.get(k).getId())){
 							break;
 						}

@@ -175,7 +175,7 @@
 
 			<tr>
 				<td>Lot No</td>
-				<td><input type="text" id="lotno" name="lotno" /></td>
+				<td><input type="text" id="lotno" name="lotno" /> <div style="float:right">Receiving Date: <input type="text" id="receivingdate" name="receivingdate" /></div></td>
 				<td rowspan="2">Quantity</td>
 				<td rowspan="2"><input type="number" id="unitnet" name="unitnet"
 					style="text-align: right; height: 40px; font-size: 30px; color: blue; width: 150px" />
@@ -404,6 +404,7 @@ $("#coreweightsize").change(function(){
 	  $('#vendor').val(data5.vendor);
 	//  alert(data5.coreweight);
 	  $("#typecore").val(data5.coreweight);
+	  $("#receivingdate").val(data5.receivingdate);
 	  }
 	  
   }
@@ -463,6 +464,7 @@ $("#coreweightsize").change(function(){
 				  $('#unitnet').val("");
 				  $('#copies').val("");
 				  $('#typecore').val("");
+				  $('#receivingdate').val("");
 				  
 				
   }
@@ -537,6 +539,7 @@ $("#coreweightsize").change(function(){
 			var   unit =   $('#unit').val();
 	var   copies =   $('#copies').val();
 			var   qty =   $('#unitnet').val();
+			var   receivingdate =   $('#receivingdate').val();
 			
    	$.ajax({
 			type: "GET",
@@ -555,7 +558,8 @@ $("#coreweightsize").change(function(){
 				"qty" : qty,
 				"woid" : woid,
 				"copies" : copies,
-				"woname" : woname
+				"woname" : woname,
+				"receivingdate" : receivingdate
 			},
 			success:function( data2 ) {
 				if(data2.error == 1){

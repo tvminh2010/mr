@@ -48,7 +48,7 @@ public HashMap<String,String> getItemCode(String serial) {
 	try {
 		stmt = conn.createStatement();
 	
-		ResultSet rs = stmt.executeQuery("SELECT DISTINCT st.product_no as ma_sp, p.product_name as ten_sp ,pi.lot_no as lot_no "
+		ResultSet rs = stmt.executeQuery("SELECT DISTINCT st.product_no as ma_sp, p.product_name as ten_sp ,pi.lot_no as lot_no, st.created_date  as receiving_date "
 				+" FROM stock_out_serial as st"
                 +" INNER JOIN product_instance AS pi ON st.serial_no = pi.serial_no"
                 +" INNER JOIN m_product_master AS p ON p.product_no = pi.product_no"
@@ -65,6 +65,7 @@ public HashMap<String,String> getItemCode(String serial) {
  	   l.put("masp",rs.getString("ma_sp"));
  	  l.put("tensp",rs.getString("ten_sp"));
  	 l.put("lotno",rs.getString("lot_no"));
+	 l.put("receivingdate",rs.getString("receiving_date"));
  	   logger.info("itemcode" + "\n" +rs.getString("lot_no") );
  	 }
 	} catch (SQLException e) {

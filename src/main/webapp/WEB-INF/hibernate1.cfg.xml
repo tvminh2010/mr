@@ -10,7 +10,7 @@
 
 		<!-- You will usually want to set this to true while debugging hibernate 
 			queries -->
-		<property name="hibernate.show_sql">false</property>
+		<property name="hibernate.show_sql">true</property>
 
 		<!-- Map the app related object entity classes here -->
 

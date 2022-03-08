@@ -17,22 +17,19 @@
 		<property name="url" value="jdbc:sqlserver://DESKTOP-NTG2U49/tabuchi"/> <property 
 		name="username" value="sa"/> <property name="password" value="kuraki123"/> 
 		</bean> -->
- 	<bean id="dataSource"
+	<bean id="dataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
 		<property name="url"
+
 			value="jdbc:sqlserver://DESKTOP-K3J0GP9:1433;DatabaseName=mr12;" />
 		<property name="username" value="sa" />
 		<property name="password" value="admin123@" />
-	</bean> 
-<!--  <bean id="dataSource"
-		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-		<property name="driverClassName" value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
-		<property name="url"
-			value="jdbc:sqlserver://DESKTOP-0LL0PDT:1433;DatabaseName=qms;" />
-		<property name="username" value="sa1" />
-		<property name="password" value="admin12345" />
-	</bean>  -->
+
+
+	</bean>
+
+
 	<bean id="improvedNamingStrategy" class="org.hibernate.cfg.ImprovedNamingStrategy" />
 
 	<!-- Configuring the session factory for hibernate -->
@@ -80,9 +77,9 @@
 		<property name="hibernateProperties">
 			<props>
 				<!-- <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop> -->
-                <prop key="hibernate.dialect">org.hibernate.dialect.SQLServer2008Dialect</prop> 
+                <prop key="hibernate.dialect">org.hibernate.dialect.SQLServerDialect</prop> 
 				<!-- <prop key="hibernate.dialect">org.hibernate.dialect.SQLServerDialect</prop> -->
-				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.show_sql">false</prop>
 			</props>
 		</property>
 

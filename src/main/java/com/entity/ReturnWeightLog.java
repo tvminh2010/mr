@@ -50,6 +50,8 @@ public class ReturnWeightLog {
 	private String ptdesc2;
 	@Column(name="vendor")
 	private String vendor;
+	@Column(name="receivingdate")
+	private String receivingdate;
 	public ReturnWeightLog(Long id, String wo, String model, Double qty, Timestamp createdate) {
 		super();
 		this.id = id;
@@ -169,6 +171,14 @@ public class ReturnWeightLog {
 	public void setVendor(String vendor) {
 		this.vendor = vendor;
 	}
+
+
+	public String getReceivingdate() {
+		return receivingdate;
+	}
+	public void setReceivingdate(String receivingdate) {
+		this.receivingdate = receivingdate;
+	}
 	@Override
 	public String toString() {
 		return "ReturnWeightLog [id=" + id + ", wo=" + wo + ", model=" + model + ", weight=" + weight + ", weightnet="
@@ -176,6 +186,7 @@ public class ReturnWeightLog {
 				+ ", serialold=" + serialold + ", serialnew=" + serialnew + ", ptdesc1=" + ptdesc1 + ", ptum=" + ptum
 				+ ", turndate=" + turndate + ", status=" + status + ", woname=" + woname + ", ptdesc2=" + ptdesc2
 				+ ", vendor=" + vendor + "]";
+
 	}
 
 	
