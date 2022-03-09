@@ -203,18 +203,18 @@ public class ExportExcel {
 		    	for(ReturnWeightLog rwl : lrw) {
 		    		      rwldao.updateStatus(rwl.getId());
 		    	}
-			    String filename =  "RETURN"+"_"+wo.getName() +"_"+simpleDateFormat.format(new Date());
-		    	
-		    	try {
-		        	FileOutputStream fos = new FileOutputStream("D:/a.xlsx");
-					workbook.write(fos);
-					
-					
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					logger.info(e);
-					e.printStackTrace();
-				}
+//			    String filename =  "RETURN"+"_"+wo.getName() +"_"+simpleDateFormat.format(new Date());
+//		    	
+//		    	try {
+//		        	FileOutputStream fos = new FileOutputStream("D:/a.xlsx");
+//					workbook.write(fos);
+//					
+//					
+//				} catch (IOException e) {
+//					// TODO Auto-generated catch block
+//					logger.info(e);
+//					e.printStackTrace();
+//				}
          
 	    	return workbook;
 	}
@@ -562,7 +562,7 @@ public class ExportExcel {
 		HSSFWorkbook workbook =  new HSSFWorkbook();
 		HSSFSheet sheet = workbook.createSheet("BC3");
 		 HSSFRow title1 = sheet.createRow(0);
-		   title1.createCell(0).setCellValue("Báo cáo Tổng hợp các Work Order");
+		   title1.createCell(0).setCellValue("BÃ¡o cÃ¡o Tá»•ng há»£p cÃ¡c Work Order");
 		 HSSFRow title = sheet.createRow(1);
 	        title.createCell(0).setCellValue("WorkOrder");
 	        title.createCell(1).setCellValue("Date");
@@ -573,9 +573,9 @@ public class ExportExcel {
 	        title.createCell(6).setCellValue("Item Code");
 	        title.createCell(7).setCellValue("Item Name");
 	        title.createCell(8).setCellValue("Item Number");
-	        title.createCell(9).setCellValue("SL nhận");
-	        title.createCell(10).setCellValue("SL hoàn trả");
-	        title.createCell(11).setCellValue("SL thực tế");
+	        title.createCell(9).setCellValue("SL nháº­n");
+	        title.createCell(10).setCellValue("SL hoÃ n tráº£");
+	        title.createCell(11).setCellValue("SL thá»±c táº¿");
 	     
 	        int rowCount=2;
 	    /*    CellStyle cellStyle = workbook.createCellStyle();
@@ -621,7 +621,7 @@ public class ExportExcel {
 		HSSFSheet sheet3= workbook.createSheet("BC3");
 		
 		 HSSFRow title = sheet.createRow(0);
-		 title.createCell(0).setCellValue("1. Báo cáo chi tiết theo WorkOrder có tổng hợp thực nhận");
+		 title.createCell(0).setCellValue("1. BÃ¡o cÃ¡o chi tiáº¿t theo WorkOrder cÃ³ tá»•ng há»£p thá»±c nháº­n");
 		 HSSFRow cellwo2 = sheet.createRow(2);
 		 cellwo2.createCell(0).setCellValue("WorkOrder");
 		 cellwo2.createCell(1).setCellValue("Date");
@@ -643,12 +643,12 @@ public class ExportExcel {
 		 cellwo5.createCell(0).setCellValue("Item Code");
 		 cellwo5.createCell(1).setCellValue("Item Name");
 		 cellwo5.createCell(2).setCellValue("Item Number");
-		 cellwo5.createCell(3).setCellValue("SL Nhận");
-		 cellwo5.createCell(4).setCellValue("SL hoàn trả");
-		 cellwo5.createCell(5).setCellValue("SL thực tế");
+		 cellwo5.createCell(3).setCellValue("SL Nháº­n");
+		 cellwo5.createCell(4).setCellValue("SL hoÃ n tráº£");
+		 cellwo5.createCell(5).setCellValue("SL thá»±c táº¿");
 		 
 		 HSSFRow title1 = sheet1.createRow(0);
-		 title1.createCell(0).setCellValue("2. Báo cáo chi tiết theo WorkOrder và trạng thái");
+		 title1.createCell(0).setCellValue("2. BÃ¡o cÃ¡o chi tiáº¿t theo WorkOrder vÃ  tráº¡ng thÃ¡i");
 		 HSSFRow cellwo21 = sheet1.createRow(2);
 		 cellwo21.createCell(0).setCellValue("WorkOrder");
 		 cellwo21.createCell(1).setCellValue("Date");
@@ -660,8 +660,8 @@ public class ExportExcel {
 		 cellwo51.createCell(0).setCellValue("Item Code");
 		 cellwo51.createCell(1).setCellValue("Item Name");
 		 cellwo51.createCell(2).setCellValue("Item Number");
-		 cellwo51.createCell(3).setCellValue("SL Nhận");
-		 cellwo51.createCell(4).setCellValue("Trạng thái");
+		 cellwo51.createCell(3).setCellValue("SL Nháº­n");
+		 cellwo51.createCell(4).setCellValue("Tráº¡ng thÃ¡i");
 		
 		 
 		 HSSFRow cellwo31 = sheet1.createRow(3);
@@ -673,7 +673,7 @@ public class ExportExcel {
 		 cellwo31.createCell(5).setCellValue( wo.getStatus());
 		 
 		 HSSFRow title3 = sheet3.createRow(0);
-		 title3.createCell(0).setCellValue("2. Báo cáo chi tiết theo WorkOrder và trạng thái");
+		 title3.createCell(0).setCellValue("2. BÃ¡o cÃ¡o chi tiáº¿t theo WorkOrder vÃ  tráº¡ng thÃ¡i");
 		 HSSFRow cellwo331 = sheet1.createRow(2);
 		 cellwo331.createCell(0).setCellValue("WorkOrder");
 		 cellwo331.createCell(1).setCellValue("Date");
@@ -684,15 +684,15 @@ public class ExportExcel {
 		 HSSFRow cellwo332 = sheet3.createRow(5);
 		 
 	
-		 cellwo332.createCell(0).setCellValue("Tên phiên");
-		 cellwo332.createCell(1).setCellValue("Trạng thái");
-		 cellwo332.createCell(2).setCellValue("Giờ yêu cầu");
-		 cellwo332.createCell(3).setCellValue("Giờ giao");
+		 cellwo332.createCell(0).setCellValue("TÃªn phiÃªn");
+		 cellwo332.createCell(1).setCellValue("Tráº¡ng thÃ¡i");
+		 cellwo332.createCell(2).setCellValue("Giá»� yÃªu cáº§u");
+		 cellwo332.createCell(3).setCellValue("Giá»� giao");
 		 cellwo332.createCell(4).setCellValue("Item Code");
 		 cellwo332.createCell(5).setCellValue("Item Name");
 		 cellwo332.createCell(6).setCellValue("Item Number");
-		 cellwo332.createCell(7).setCellValue("Số Lượng YC");
-		 cellwo332.createCell(8).setCellValue("Số Lượng giao");
+		 cellwo332.createCell(7).setCellValue("Sá»‘ LÆ°á»£ng YC");
+		 cellwo332.createCell(8).setCellValue("Sá»‘ LÆ°á»£ng giao");
 		
 		 
 		 HSSFRow cellwo333 = sheet3.createRow(3);
