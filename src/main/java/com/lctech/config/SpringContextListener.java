@@ -125,13 +125,13 @@ public class SpringContextListener implements ApplicationListener<ContextRefresh
 //		 }
 //		 }
 		//export return
-		 List<ReturnExcel> lt = rxdao.getList( d);
-		 for(ReturnExcel re: lt) {
-		        
-			 WorkOrder wo=  wodao.getWObyId(re.getWoid());
-		       eportexcel.exportReturn(wo,null,re.getPathexcel());
-		    
-		  }
+//		 List<ReturnExcel> lt = rxdao.getList( d);
+//		 for(ReturnExcel re: lt) {
+//		        
+//			 WorkOrder wo=  wodao.getWObyId(re.getWoid());
+//		       eportexcel.exportReturn(wo,null,re.getPathexcel());
+//		    
+//		  }
        
 	};
 	  public static Date addDays(Date date, int days)
