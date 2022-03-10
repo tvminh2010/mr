@@ -48,17 +48,19 @@ public HashMap<String,String> getItemCode(String serial) {
 	try {
 		stmt = conn.createStatement();
 	
-		ResultSet rs = stmt.executeQuery("SELECT DISTINCT st.product_no as ma_sp, p.product_name as ten_sp ,pi.lot_no as lot_no, st.created_date  as receiving_date "
-				+" FROM stock_out_serial as st"
-                +" INNER JOIN product_instance AS pi ON st.serial_no = pi.serial_no"
-                +" INNER JOIN m_product_master AS p ON p.product_no = pi.product_no"
-				+ " WHERE st.serial_no like '"+ serial +"' limit 1");
+//		ResultSet rs = stmt.executeQuery("SELECT DISTINCT st.product_no as ma_sp, p.product_name as ten_sp ,pi.lot_no as lot_no, st.created_date  as receiving_date "
+//				+" FROM stock_out_serial as st"
+//                +" INNER JOIN product_instance AS pi ON st.serial_no = pi.serial_no"
+//                +" INNER JOIN m_product_master AS p ON p.product_no = pi.product_no"
+//				+ " WHERE st.serial_no like '"+ serial +"' limit 1");
 		
 	/*		ResultSet rs = stmt.executeQuery("SELECT DISTINCT ma_sp as ma_sp, ten_sp as ten_sp ,lot_no as lot_no "
 					+" FROM v_test2"
 					+ " WHERE serial_no like '"+ serial +"' limit 1");*/
-  
-  
+		String sql = "SELECT  sti.product_no as ma_sp, p.product_name as ten_sp, sti.lot_no as lot_no, CASE  WHEN ( sti.date_in is null ) THEN si.actual_date ELSE sti.date_in END AS receiving_date  "
+				+ " FROM stock_in_actual sti INNER JOIN m_product_master AS p ON sti.product_no = p.product_no "
+				+ " INNER JOIN stock_in AS si ON sti.stock_in_no = si.stock_in_no WHERE sti.serial_no like '"+ serial +"' limit 1";
+		ResultSet rs = stmt.executeQuery(sql);
     boolean k = false;
     while (rs.next()) {
  	   k=true;
