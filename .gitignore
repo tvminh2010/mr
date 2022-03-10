@@ -1,6 +1,0 @@
-/target/
-.settings
-.idea
-/src/main/resources/config.properties
-/src/main/webapp/WEB-INF/applicationContext-jdbc.xml
-

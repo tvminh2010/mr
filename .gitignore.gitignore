@@ -1,0 +1,9 @@
+/target/
+.settings
+.idea
+/src/main/resources/config.properties
+/src/main/resources/log4j.properties
+/src/main/resources/titles/templates.web
+/src/main/webapp/WEB-INF/applicationContext-jdbc.xml
+
+

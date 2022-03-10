@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="murata" language="groovy" pageWidth="283" pageHeight="141" orientation="Landscape" whenNoDataType="BlankPage" columnWidth="283" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="2b65c4e9-88b7-4b5b-9a82-7cc2424dc62e">
+	<property name="ireport.zoom" value="3.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SerialNo" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="NameKHYC" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT serial_no as s
+				  ,lot_no as lotno
+				  , ma_sp
+				  , ten_sp as ten
+
+
+				FROM v_test2
+				WHERE serial_no like $P{SerialNo} limit 1]]>
+	</queryString>
+	<field name="s" class="java.lang.String"/>
+	<field name="lotno" class="java.lang.String"/>
+	<field name="ma_sp" class="java.lang.String"/>
+	<field name="ten" class="java.lang.String"/>
+	<detail>
+		<band height="141" splitType="Stretch">
+			<rectangle>
+				<reportElement mode="Transparent" x="4" y="3" width="275" height="135" uuid="87f5468b-535e-4744-8a86-0310e006ddba"/>
+				<graphicElement>
+					<pen lineWidth="0.2"/>
+				</graphicElement>
+			</rectangle>
+			<componentElement>
+				<reportElement x="31" y="15" width="234" height="20" uuid="1f5d74ff-76de-4090-878a-affecdc15407"/>
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128" drawText="false" checksumRequired="false" barWidth="0" barHeight="0">
+					<jr:codeExpression><![CDATA[$P{NameKHYC}!=null && $P{NameKHYC}.length()>0?$P{NameKHYC}:$F{ten}]]></jr:codeExpression>
+				</jr:barbecue>
+			</componentElement>
+			<componentElement>
+				<reportElement x="31" y="59" width="234" height="20" isRemoveLineWhenBlank="true" uuid="8d725547-aa4c-458d-b60a-87ac7e3ec13d"/>
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128" drawText="false" checksumRequired="false" barWidth="0" barHeight="0">
+					<jr:codeExpression><![CDATA[$F{s}]]></jr:codeExpression>
+				</jr:barbecue>
+			</componentElement>
+			<componentElement>
+				<reportElement x="31" y="105" width="234" height="20" isRemoveLineWhenBlank="true" uuid="fa0a2f40-b9db-45a4-9577-e81bdce7083e"/>
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128" drawText="false" checksumRequired="false" barWidth="0" barHeight="0">
+					<jr:codeExpression><![CDATA[$F{ten}]]></jr:codeExpression>
+				</jr:barbecue>
+			</componentElement>
+			<staticText>
+				<reportElement x="27" y="3" width="100" height="13" uuid="53479857-e2e8-42c7-9cc8-e945ee2425e6"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[1. Canon Code]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="26" y="47" width="100" height="12" isRemoveLineWhenBlank="true" uuid="64898346-94ba-4496-a32a-93320cb28713"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[2. VTE serial]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="27" y="93" width="100" height="12" isRemoveLineWhenBlank="true" uuid="d5a78a8c-a71f-4e44-983b-d345ba520782"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[3. VTE code]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="59" y="80" width="200" height="12" isRemoveLineWhenBlank="true" uuid="9e40a723-b4bc-42b3-ad78-5a3bb7b88d86"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{s}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="59" y="126" width="201" height="12" isRemoveLineWhenBlank="true" uuid="8d6d320f-e0d1-4732-b52e-c51275e70bcd"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ten}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="21" y="3" width="1" height="135" uuid="c0db0992-bb9c-4851-b4cf-b0edb1a59941"/>
+				<graphicElement>
+					<pen lineWidth="0.2"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement x="-4" y="8" width="21" height="125" uuid="0b228856-6155-4abf-9ab5-92e78ec36631"/>
+				<textElement rotation="Right" markup="none">
+					<font size="9" isBold="true" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[CANON HI-TECH THAILAND]]></text>
+			</staticText>
+			<textField>
+				<reportElement mode="Transparent" x="59" y="35" width="201" height="11" uuid="e725f34d-797d-4523-a95a-aba1911dbc3e"/>
+				<textElement>
+					<font fontName="Times New Roman" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{NameKHYC}!=null && $P{NameKHYC}.length()>0?$P{NameKHYC}:$F{ten}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

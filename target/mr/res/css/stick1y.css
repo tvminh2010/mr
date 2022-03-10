@@ -1,0 +1,7 @@
+
+
+@media print {
+ .bg-red{
+    background: #FF0000 !important;
+    -webkit-print-color-adjust:exact;
+   }}

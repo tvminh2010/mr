@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+<tiles-definitions>
+	<definition name="admin" template="/WEB-INF/pages/layout/admin.jsp">
+		<put-attribute name="title" value="" />
+		<put-attribute name="header" value="/WEB-INF/pages/admin/header.jsp" />
+		<put-attribute name="left-sidebar" value="/WEB-INF/pages/admin/sidebar.jsp" />
+		<put-attribute name="error" value="/WEB-INF/pages/mr/errornolayout.jsp" />
+		<put-attribute name="content" value="" />
+		<put-attribute name="footer" value="/WEB-INF/pages/common/footer.jsp" />
+	</definition>
+	<definition name="controlPanel" extends="admin">
+		<put-attribute name="title" value="Admin - Control Panel" />
+		<put-attribute name="content" value="/WEB-INF/pages/admin/body/main.jsp" />
+	</definition>
+		<definition name="changepass" extends="admin">
+		<put-attribute name="title" value="Change Password - Control Panel" />
+		<put-attribute name="content" value="/WEB-INF/pages/admin/body/changepass.jsp" />
+	</definition>
+	<definition name="staff" extends="admin">
+		<put-attribute name="title" value="Admin - Staff Management" />
+		<put-attribute name="content" value="/WEB-INF/pages/admin/body/staff.jsp" />
+	</definition>
+	<definition name="user" extends="admin">
+		<put-attribute name="title" value="Admin - User Management" />
+		<put-attribute name="content" value="/WEB-INF/pages/admin/body/user.jsp" />
+	</definition>
+    <definition name="main" template="/WEB-INF/pages/layout/main.jsp">
+		<put-attribute name="title" value="" />
+		<put-attribute name="header" value="" />
+        <put-attribute name="message" value="" />
+		<put-attribute name="content" value="" />
+		<put-attribute name="footer" value="" />
+    </definition>
+     <definition name="lineycnvl" template="/WEB-INF/pages/layout/nolayout.jsp">
+		
+		<put-attribute name="title" value="" />
+		
+		<put-attribute name="error" value="/WEB-INF/pages/mr/errornolayout.jsp" />
+		<put-attribute name="content" value="" />
+		
+	
+    </definition>
+         <definition name="returnlayout" template="/WEB-INF/pages/layout/returnlayout.jsp">
+		
+		<put-attribute name="title" value="" />
+		
+		<put-attribute name="error" value="/WEB-INF/pages/hoantra/errorreturnlayout.jsp" />
+		<put-attribute name="content" value="" />
+		
+	
+    </definition>
+<!-- 	<definition name="/" extends="main">
+		<put-attribute name="title" value="Main" />
+		<put-attribute name="content" value="/WEB-INF/pages/common/main1.jsp" />
+	</definition> -->
+    <definition name="error" extends="main">
+   		<put-attribute name="title" value="Error" />
+   		<put-attribute name="content" value="/WEB-INF/pages/common/error.jsp" />
+   	</definition>
+   	  <definition name="denied" extends="main">
+   		<put-attribute name="title" value="Error" />
+   		<put-attribute name="content" value="/WEB-INF/pages/common/denied.jsp" />
+   	</definition>
+   		<definition name="mr" template="/WEB-INF/pages/layout/mr.jsp">
+		<put-attribute name="title" value="" />
+		<put-attribute name="header" value="/WEB-INF/pages/common/header.jsp" />
+		<put-attribute name="left-sidebar" value="/WEB-INF/pages/common/sidebar.jsp" />
+		<put-attribute name="error" value="/WEB-INF/pages/mr/error.jsp" />
+		<put-attribute name="content" value="" />
+		<put-attribute name="footer" value="/WEB-INF/pages/common/footer.jsp" />
+	</definition>
+		<definition name="yeucauNVL" extends="lineycnvl">
+		<put-attribute name="title" value="Yêu cầu NVL - Material Report" />
+		<put-attribute name="content" value="/WEB-INF/pages/mr/yeucauNVL.jsp" />
+	</definition>
+		<definition name="return" extends="returnlayout">
+		<put-attribute name="title" value="Cân hàng trả lại - Material Report" />
+		<put-attribute name="content" value="/WEB-INF/pages/hoantra/return.jsp" />
+	</definition>
+		
+		<definition name="listreturn" extends="returnlayout">
+		<put-attribute name="title" value="Danh sách cân hoàn trả - Material Report" />
+		<put-attribute name="content" value="/WEB-INF/pages/hoantra/listreturn.jsp" />
+	</definition>
+	<definition name="planNVL" extends="mr">
+		<put-attribute name="title" value="Kế hoạch - Material Report" />
+		<put-attribute name="content" value="/WEB-INF/pages/mr/planNVL.jsp" />
+	</definition>
+		<definition name="closetime" extends="mr">
+		<put-attribute name="title" value="Đặt lịch - Material Report" />
+		<put-attribute name="content" value="/WEB-INF/pages/mr/closetime.jsp" />
+	</definition>
+		<definition name="giaonhan" extends="mr">
+		<put-attribute name="title" value="Giao nhan - Material Report" />
+		<put-attribute name="content" value="/WEB-INF/pages/mr/giaonhan.jsp" />
+	</definition>
+	<definition name="turnexcel" extends="mr">
+		<put-attribute name="title" value="Turn Excel - Material Report" />
+		<put-attribute name="content" value="/WEB-INF/pages/mr/turnexcel.jsp" />
+	</definition>
+	<definition name="returnexcel" extends="mr">
+		<put-attribute name="title" value="Return Excel - Material Report" />
+		<put-attribute name="content" value="/WEB-INF/pages/mr/returnexcel.jsp" />
+	</definition>
+	<definition name="model" extends="setting">
+		<put-attribute name="title" value="Model - Material Report" />
+		<put-attribute name="content" value="/WEB-INF/pages/mr/model.jsp" />
+	</definition>
+		<definition name="bom" extends="setting">
+		<put-attribute name="title" value="Bom - Material Report" />
+		<put-attribute name="content" value="/WEB-INF/pages/mr/bom.jsp" />
+	</definition>
+		<definition name="returnbom" extends="setting">
+		<put-attribute name="title" value="Bom - Material Report" />
+		<put-attribute name="content" value="/WEB-INF/pages/mr/returnbom.jsp" />
+	</definition>
+	<definition name="listycnvl" extends="mr">
+		<put-attribute name="title" value="YCNVL - Material Report" />
+		<put-attribute name="content" value="/WEB-INF/pages/mr/listycnvl.jsp" />
+	</definition>
+	<definition name="hoantra" extends="mr">
+		<put-attribute name="title" value="Hoàn trả - Material Report" />
+		<put-attribute name="content" value="/WEB-INF/pages/mr/hoantra.jsp" />
+	</definition>
+	<definition name="giaonhan" extends="mr">
+		<put-attribute name="title" value="Giao nhận - Material Report" />
+		<put-attribute name="content" value="/WEB-INF/pages/mr/giaonhan.jsp" />
+	</definition>
+	<definition name="bywo" extends="mr">
+		<put-attribute name="title" value="BC WorkOrder - Material Report" />
+		<put-attribute name="content" value="/WEB-INF/pages/mr/bywo.jsp" />
+	</definition>
+		<definition name="bywo1" extends="mr">
+		<put-attribute name="title" value="BC WorkOrder - Material Report" />
+		<put-attribute name="content" value="/WEB-INF/pages/mr/bywo1.jsp" />
+	</definition>
+	<definition name="byturn" extends="mr">
+		<put-attribute name="title" value="BC Phiên - Material Report" />
+		<put-attribute name="content" value="/WEB-INF/pages/mr/byturn.jsp" />
+	</definition>
+	<definition name="bc" extends="mr">
+		<put-attribute name="title" value="BC - Material Report" />
+		<put-attribute name="content" value="/WEB-INF/pages/mr/bc.jsp" />
+	</definition>
+		<definition name="bywoptdesc2" extends="mr">
+		<put-attribute name="title" value="WorkOrder By Item Name - Material Report" />
+		<put-attribute name="content" value="/WEB-INF/pages/mr/bywoptdesc2.jsp" />
+	</definition>
+	<definition name="bywoptdesc21" extends="mr">
+		<put-attribute name="title" value="WorkOrders - Material Report" />
+		<put-attribute name="content" value="/WEB-INF/pages/mr/bywoptdesc21.jsp" />
+	</definition>
+		<definition name="cowo" extends="mr">
+		<put-attribute name="title" value="Đóng/Mở WorkOrder - Material Report" />
+		<put-attribute name="content" value="/WEB-INF/pages/mr/cowo.jsp" />
+	</definition>
+	  		<definition name="setting" template="/WEB-INF/pages/layout/setting.jsp">
+		<put-attribute name="title" value="" />
+		<put-attribute name="header" value="/WEB-INF/pages/common/header.jsp" />
+		<put-attribute name="left-sidebar" value="/WEB-INF/pages/common/sidebar.jsp" />
+		<put-attribute name="error" value="/WEB-INF/pages/mr/errorsetting.jsp" />
+		<put-attribute name="content" value="" />
+		<put-attribute name="footer" value="/WEB-INF/pages/common/footer.jsp" />
+	</definition>
+</tiles-definitions>

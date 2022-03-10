@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="murata" language="groovy" pageWidth="283" pageHeight="141" orientation="Landscape" whenNoDataType="BlankPage" columnWidth="283" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="2b65c4e9-88b7-4b5b-9a82-7cc2424dc62e">
+	<property name="ireport.zoom" value="1.8627639691774651"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SerialNo" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="NameKHYC" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="vendor" class="java.lang.String"/>
+	<parameter name="partcode" class="java.lang.String"/>
+	<parameter name="partname" class="java.lang.String"/>
+	<parameter name="lotno" class="java.lang.String"/>
+	<parameter name="cuttingdate" class="java.lang.String"/>
+	<parameter name="wid" class="java.lang.String"/>
+	<parameter name="qtypcc" class="java.lang.String"/>
+	<parameter name="qtymet" class="java.lang.String"/>
+	<parameter name="weight" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT n1.s as Serial_No
+,ma_sp
+,ten
+,string_agg(case when rnum=1 then n1.lotno else null end,'')  as lotno1
+,string_agg(case when rnum=2 then lotno else null end,'')  as lotno2
+,string_agg(case when rnum=3 then lotno else null end,'') as lotno3
+,string_agg(case when rnum=4 then lotno else null end,'') as lotno4
+,string_agg(case when rnum=5 then lotno else null end,'') as lotno5
+,sum(case when rnum=1 then round(qty) else 0 end ) as qty1
+,sum(case when rnum=2 then round(qty) else 0 end) as qty2
+,sum(case when rnum=3 then round(qty) else 0 end) as qty3
+,sum(case when rnum=4 then round(qty) else 0 end) as qty4
+,sum(case when rnum=5 then round(qty) else 0 end) as qty5
+,sum(round(qty)) as total
+			FROM
+				(SELECT serial_no as s
+				  ,replace(lot_no,'■', 'N') as lotno
+				  , ma_sp
+				  , ten_sp as ten
+				  , "Total" as qty
+				  , row_number() OVER () as rnum
+				FROM v_test2
+				WHERE serial_no like $P{SerialNo}) n1
+			GROUP BY n1.s, ma_sp, ten]]>
+	</queryString>
+	<detail>
+		<band height="141" splitType="Stretch">
+			<componentElement>
+				<reportElement x="62" y="6" width="213" height="16" isRemoveLineWhenBlank="true" uuid="6e234b36-8596-45ab-a3b9-32de15772ce9"/>
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128" drawText="false" checksumRequired="false" barWidth="14" barHeight="333">
+					<jr:codeExpression><![CDATA[$P{NameKHYC}!=null && $P{NameKHYC}.length()>0?$P{NameKHYC}:$F{ten}]]></jr:codeExpression>
+				</jr:barbecue>
+			</componentElement>
+			<textField>
+				<reportElement mode="Transparent" x="66" y="22" width="124" height="11" uuid="84a1cb72-1161-4914-a875-3870f7e85e4d"/>
+				<textElement>
+					<font fontName="Times New Roman" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{SerialNo}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="4" y="1" width="56" height="16" uuid="16e81df0-4e7c-4cdd-b863-870956245cc7"/>
+				<textElement markup="none">
+					<font fontName="SansSerif" size="8" isBold="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Vendor]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="4" y="15" width="100" height="20" uuid="256a4ee1-8262-4265-a820-76fa57d9ffb7"/>
+				<textFieldExpression><![CDATA[$P{vendor}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="4" y="38" width="56" height="16" uuid="019b987e-9bc9-41c4-bff7-f065cfd5a739"/>
+				<textElement markup="none">
+					<font fontName="SansSerif" size="8" isBold="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Part code:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4" y="56" width="56" height="16" uuid="42e0e156-be0c-4fea-b773-12b0844bac3c"/>
+				<textElement markup="none">
+					<font fontName="SansSerif" size="8" isBold="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Part Name:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4" y="82" width="56" height="16" uuid="152c06b0-e891-4622-aed3-e0ccbbf8c171"/>
+				<textElement markup="none">
+					<font fontName="SansSerif" size="8" isBold="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Lot No:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="6" y="108" width="56" height="16" uuid="931a2ad2-aa1e-4dfb-9734-74aa73f7628c"/>
+				<textElement markup="none">
+					<font fontName="SansSerif" size="8" isBold="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Cutting date:]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="191" y="64" width="85" height="69" uuid="a36a10ec-391c-4b9a-b3e6-9d8ad7084693"/>
+				<graphicElement>
+					<pen lineWidth="0.4"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="195" y="66" width="34" height="16" uuid="f92e136c-7e86-4109-8b28-d7cefa030a4c"/>
+				<textElement markup="none">
+					<font fontName="SansSerif" size="7" isBold="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Wid (mm):]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="195" y="84" width="34" height="16" uuid="a387b301-3193-452a-9842-3817b3d5bcd9"/>
+				<textElement markup="none">
+					<font fontName="SansSerif" size="7" isBold="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Q'ty (Pcc):]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="195" y="100" width="34" height="16" uuid="46048786-b3c2-433c-8a57-c1dcd2cbed7b"/>
+				<textElement markup="none">
+					<font fontName="SansSerif" size="7" isBold="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Q'ty (Met):]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="195" y="117" width="34" height="16" uuid="c0ded2c5-ea76-4e35-aa09-992c0c5dda9e"/>
+				<textElement markup="none">
+					<font fontName="SansSerif" size="7" isBold="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Weight (g):]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="66" y="37" width="163" height="20" uuid="8765111f-8b93-4a1b-a4b1-8bd6d60ca9c9"/>
+				<textFieldExpression><![CDATA[$P{partcode}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="66" y="57" width="124" height="20" uuid="a5fff918-60e6-40b5-8271-aa2d2c740744"/>
+				<textFieldExpression><![CDATA[$P{partname}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="66" y="108" width="100" height="20" uuid="f37bfc7a-cb54-48eb-ac79-18f2e3bf9cbf"/>
+				<textFieldExpression><![CDATA[$P{cuttingdate}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="232" y="101" width="100" height="15" uuid="d81128c8-2cf5-4d3c-a174-045e20dcbe6a"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{qtymet}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="232" y="85" width="100" height="20" uuid="64a9c1ee-53b0-40fa-802f-c65361cdb2a0"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{qtypcc}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="232" y="119" width="100" height="20" uuid="8997d593-1a4e-4bd7-86ae-5061522c5f47"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{weight}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="66" y="82" width="100" height="20" uuid="97169117-7f3b-43aa-9b40-b11f1fbe445e"/>
+				<textFieldExpression><![CDATA[$P{lotno}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="232" y="67" width="100" height="20" uuid="ae5adfad-d481-4072-bedf-e466191c4954"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{wid}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>
