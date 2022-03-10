@@ -16,4 +16,5 @@ public interface ReturnWeightLogDao {
 	public void updateStatus(Long id);
 	public ReturnWeightLog getReturnWeightLog(Long id);
 	public void delete(Long id);
+	List<ReturnWeightLog> getByDate(Date createdate);
 }

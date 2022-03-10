@@ -1,6 +1,7 @@
 package com.impl;
 
 import java.sql.Time;
+import java.util.Date;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -68,6 +69,18 @@ private Config config;
 		Session session = this.sessionFactory.getCurrentSession();
 		Query query = session.createQuery("from ReturnWeightLog where  model is not null and model not like  '' and status= 1 and  wo =:woid order by serialnew");
 		query.setParameter("woid", woid);
+
+		List<ReturnWeightLog> listps = (List<ReturnWeightLog>) query.list();
+	   
+	    return listps;
+	}
+	
+
+	@Override
+	public List<ReturnWeightLog> getByDate(Date createdate) {
+		Session session = this.sessionFactory.getCurrentSession();
+		Query query = session.createQuery("from ReturnWeightLog where  createdate  > :createdate");
+		query.setParameter("createdate", createdate);
 
 		List<ReturnWeightLog> listps = (List<ReturnWeightLog>) query.list();
 	   

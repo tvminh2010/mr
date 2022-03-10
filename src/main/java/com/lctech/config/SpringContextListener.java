@@ -3,7 +3,11 @@ package com.lctech.config;
 
 
 import java.sql.Time;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -17,10 +21,15 @@ import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Component;
 
+import com.config.DBPosgressConnection;
 import com.dao.CloseTimeDao;
+import com.dao.ReturnWeightLogDao;
 import com.dao.WeightElectricQueueDao;
 import com.dao.WorkOrderDao;
 import com.entity.CloseTime;
+import com.entity.CoreWeight;
+import com.entity.Product;
+import com.entity.ReturnWeightLog;
 import com.entity.WorkOrder;
 import com.lctech.scheduler.MyTask;
 import com.lctech.scheduler.ScheduledTasks;
@@ -46,6 +55,10 @@ public class SpringContextListener implements ApplicationListener<ContextRefresh
 	private WeightElectricQueueDao weqdao;
 	@Autowired
 	private WorkOrderDao wodao;
+	  @Autowired
+	   private  ReturnWeightLogDao rwldao;
+		 @Autowired
+			private DBPosgressConnection posgressConn;
 	 /* @Bean
 	    public TaskScheduler taskScheduler() {
 	        return new ConcurrentTaskScheduler();
@@ -72,9 +85,54 @@ public class SpringContextListener implements ApplicationListener<ContextRefresh
 		}
 	
 		
+		//update coreweightlog
 		
-		//  WorkOrder wo = wodao.getWObyId("19d0ec72-746b-41cf-99fe-4dcccce72161");
-		 // eportexcel.exportReturn(wo,null);
+		 Date d = addDays(new Date(),-40);
+		 List<ReturnWeightLog> tt = rwldao.getByDate(d) ;
+
+		 for(ReturnWeightLog r : tt) {
+			 
+		 
+			 HashMap<String,String> item = posgressConn.getItemCode(r.getSerialold());
+				if(item != null && item.size()>1) {
+			     String itemcode  = item.get("masp");
+				
+				
+			
+				
+				
+				SimpleDateFormat formatinput = new SimpleDateFormat("yyyy-MM-dd");
+				SimpleDateFormat formatoutput = new SimpleDateFormat("dd/MM/yyyy");
+				Date inputd;
+				try {
+					inputd = formatinput.parse(item.get("receivingdate"));
+					logger.info("receivingdate:" + inputd);
+					logger.info("receivingdate ouput :" + formatoutput.format(inputd));
+
+					 r.setReceivingdate(formatoutput.format(inputd));
+					 
+					 rwldao.save(r);
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				 
+				
+		 }
+		 }
+		//export return
+		  List<WorkOrder> lwo = wodao.getListbyDate(d);
+		  for(WorkOrder wo: lwo) {
+		       eportexcel.exportReturn(wo,null);
+		    
+		  }
        
 	};
+	  public static Date addDays(Date date, int days)
+	    {
+	        Calendar cal = Calendar.getInstance();
+	        cal.setTime(date);
+	        cal.add(Calendar.DATE, days); //minus number would decrement the days
+	        return cal.getTime();
+	    }
 }

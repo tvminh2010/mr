@@ -29,5 +29,6 @@ public interface WorkOrderDao {
   List<String> getCowo(boolean co);
   void delete(WorkOrder ct);
   void deletelist(String lct);
+List<WorkOrder> getListbyDate(Date d);
   
 }

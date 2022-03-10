@@ -203,18 +203,18 @@ public class ExportExcel {
 		    	for(ReturnWeightLog rwl : lrw) {
 		    		      rwldao.updateStatus(rwl.getId());
 		    	}
-//			    String filename =  "RETURN"+"_"+wo.getName() +"_"+simpleDateFormat.format(new Date());
-//		    	
-//		    	try {
-//		        	FileOutputStream fos = new FileOutputStream("D:/a.xlsx");
-//					workbook.write(fos);
-//					
-//					
-//				} catch (IOException e) {
-//					// TODO Auto-generated catch block
-//					logger.info(e);
-//					e.printStackTrace();
-//				}
+			    String filename =  "RETURN"+"_"+wo.getName() +"_"+simpleDateFormat.format(new Date());
+		    	
+		    	try {
+		        	FileOutputStream fos = new FileOutputStream("D:/"+filename+".xlsx");
+					workbook.write(fos);
+					
+					
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					logger.info(e);
+					e.printStackTrace();
+				}
          
 	    	return workbook;
 	}

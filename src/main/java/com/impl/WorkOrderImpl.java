@@ -133,7 +133,15 @@ private Config config;
 		    List<WorkOrder> lastPage =  (List<WorkOrder>)selectQuery.list();
 		return lastPage;
 	}
-
+	
+	@Override
+	public List<WorkOrder> getListbyDate(Date d) {
+		Session session = this.sessionFactory.getCurrentSession();
+		    Query selectQuery = session.createQuery("From WorkOrder wo where wo.createdate > :createdate");
+		    selectQuery.setParameter("createdate", d);
+		    List<WorkOrder> lastPage =  (List<WorkOrder>)selectQuery.list();
+		return lastPage;
+	}
 	@Override
 	public Product getProduct(String woid) {
 		Session session = this.sessionFactory.getCurrentSession();

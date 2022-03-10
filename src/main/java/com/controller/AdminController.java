@@ -35,6 +35,7 @@ public class AdminController {
 	@Autowired
 	private RoleDao roledao;
 
+	
 	@RequestMapping(value = {"/controlPanel"}, method = RequestMethod.GET)
 	public String getAdminControlPanel(Model model){
 		User us = usdao.getUserByName(getPrincipal());
@@ -42,6 +43,7 @@ public class AdminController {
 		    us.setStaff(sff);
 		    Role r = roledao.getById(us.getRole().getId());
 		    us.setRole(r);
+		    
 		model.addAttribute("user", us);
 		List<String> role=usdao.getRole(getPrincipal());
 		model.addAttribute("role", role);

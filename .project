@@ -50,5 +50,6 @@
 		<nature>org.eclipse.wst.common.project.facet.core.nature</nature>
 		<nature>org.eclipse.wst.jsdt.core.jsNature</nature>
 		<nature>com.jaspersoft.studio.babel.editor.rbeNature</nature>
+		<nature>org.eclipse.jem.beaninfo.BeanInfoNature</nature>
 	</natures>
 </projectDescription>
