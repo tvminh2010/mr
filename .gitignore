@@ -1,6 +1,6 @@
 /target/
 .settings
 .idea
-/mr/src/main/resources/config.properties
-/mr/src/main/webapp/WEB-INF/applicationContext-jdbc.xml
+/src/main/resources/config.properties
+/src/main/webapp/WEB-INF/applicationContext-jdbc.xml
 

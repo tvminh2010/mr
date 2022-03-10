@@ -78,7 +78,7 @@ private Config config;
 	@Override
 	public List<ReturnWeightLog> getReturnWeightLogBywoid0(String woid) {
 		Session session = this.sessionFactory.getCurrentSession();
-		Query query = session.createQuery("from ReturnWeightLog where  model is not null and model not like  '' and status= 0 and  wo =:woid order by serialnew");
+		Query query = session.createQuery("from ReturnWeightLog where  model is not null and model not like  '' and status= 0  and and  wo =:woid order by serialnew");
 		query.setParameter("woid", woid);
 
 		List<ReturnWeightLog> listps = (List<ReturnWeightLog>) query.list();
