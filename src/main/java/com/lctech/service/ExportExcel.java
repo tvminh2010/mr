@@ -218,6 +218,136 @@ public class ExportExcel {
          
 	    	return workbook;
 	}
+	
+	public XSSFWorkbook   exportReturn(WorkOrder  wo,HttpServletRequest req, String nameexcel) {
+		logger.info("wo " + wo.toString());
+		List<ReturnWeightLog> lrw = rwldao.getReturnWeightLogBywoid0(wo.getId());
+		String userDir = System.getProperty("user.dir");
+		//ServletContext context = req.getServletContext();
+	        String appPath = servletContext.getRealPath("");
+
+		String filePathToBeServed = appPath +"/data/Formlabel.xlsx" ;
+		logger.info("filePathToBeServed " + filePathToBeServed);
+        File file = new File(filePathToBeServed);
+		 //File file = new File(fileName);
+         FileInputStream fin = null;  
+         XSSFWorkbook workbook = new XSSFWorkbook();  
+         FileOutputStream fout = null;
+         String dat = "";
+	        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yy hh:mm");
+	        dat = simpleDateFormat.format(new Date());
+         if (file.exists()) {
+        	 try{
+                 fout = new FileOutputStream(filePathToBeServed, true);
+                 fin = new FileInputStream(filePathToBeServed);
+                 workbook = new XSSFWorkbook(fin);
+                 for (int i=0; i<workbook.getNumberOfSheets(); i++) {
+                     System.out.println( workbook.getSheetName(i) );                                    
+                 }
+                 XSSFSheet sheet = workbook.getSheetAt(0);
+                 sheet.getRow(2).getCell(1).setCellValue(wo.getModel().getPt_desc1());
+                 sheet.getRow(1).getCell(4).setCellValue(wo.getLine().getName());
+                 sheet.getRow(2).getCell(4).setCellValue("");
+                 sheet.getRow(2).getCell(5).setCellValue(dat);
+                 sheet.getRow(1).createCell(1).setCellValue(""+wo.getName());
+                 XSSFCellStyle style=workbook.createCellStyle();
+                 style.setBorderBottom(BorderStyle.THIN);
+                 style.setBorderTop(BorderStyle.THIN);
+                 style.setBorderRight(BorderStyle.THIN);
+                 style.setBorderLeft(BorderStyle.THIN);
+             	int rowCount = 4;
+             	int i = 1;
+    	    	for(ReturnWeightLog rwl : lrw) {
+    	    		if(rwl.getQty()>0) {
+    	    			XSSFCell cell0 =  sheet.getRow(rowCount).createCell(0);
+    	    			cell0.setCellValue(i);
+    	    			cell0.setCellStyle(style);
+    	    			XSSFCell cell1 =  sheet.getRow(rowCount).createCell(1);
+    	    			cell1.setCellValue(rwl.getModel());
+    	    			cell1.setCellStyle(style);
+    	    			XSSFCell cell2 =  sheet.getRow(rowCount).createCell(2);
+    	    			cell2.setCellValue(rwl.getPtdesc1());
+    	    			cell2.setCellStyle(style);
+    	    			XSSFCell cell3 =  sheet.getRow(rowCount).createCell(3);
+    	    			cell3.setCellValue(rwl.getLotno());
+    	    			cell3.setCellStyle(style);
+    	    			XSSFCell cell4 =  sheet.getRow(rowCount).createCell(4);
+    	    			cell4.setCellValue(rwl.getQty());
+    	    			cell4.setCellStyle(style);
+    	    			XSSFCell cell5 =  sheet.getRow(rowCount).createCell(5);
+    	    			cell5.setCellValue(rwl.getSerialnew());
+    	    			cell5.setCellStyle(style);
+    	    			XSSFCell cell6 =  sheet.getRow(rowCount).createCell(6);
+    	    			cell6.setCellValue(rwl.getPtum());
+    	    			cell6.setCellStyle(style);
+    	    			XSSFCell cell7 =  sheet.getRow(rowCount).createCell(7);
+    	    			cell7.setCellValue(rwl.getReceivingdate());
+    	    			cell7.setCellStyle(style);
+    	    			
+    	                // sheet.getRow(rowCount).createCell(2).setCellValue(rwl.getPtdesc1());
+    	                 //sheet.getRow(rowCount).createCell(3).setCellValue(rwl.getLotno());
+    	                // sheet.getRow(rowCount).createCell(4).setCellValue(rwl.getQty());
+    	                 //sheet.getRow(rowCount).createCell(5).setCellValue(rwl.getSerialnew());
+    	                 //sheet.getRow(rowCount).createCell(6).setCellValue(rwl.getPtum());
+    	    		}
+    	    		rowCount++;
+    	    		i++;
+    	    	}
+		
+                XSSFSheet sheet1 = workbook.getSheetAt(1);
+                sheet1.getRow(1).getCell(0).setCellValue("WO: " + wo.getName());
+                sheet1.getRow(1).getCell(3).setCellValue("Line: " +wo.getLine().getName());
+                sheet1.getRow(2).getCell(3).setCellValue("Model: " +wo.getModel().getPt_desc1());
+                sheet1.getRow(1).getCell(7).setCellValue("");
+                sheet1.getRow(2).getCell(7).setCellValue(dat);
+				List<Object[][]> lrw1 = rwldao.getReturnWeightLogBywoidOrderbyNVL0(wo.getId());
+
+            	int rowCount1 =5;
+   	    	for(Object[] rwl : lrw1) {
+   	    		Double qty = (Double)rwl[2];
+	    		String model = (String)rwl[1];
+	    		Long count = (Long)rwl[3];
+	    		 CoreWeight cw =  cwdao.getByItemcode(model);
+	    		 Product p = pdao.getProductById(model);
+   	    		if(qty>0) {
+   	    			sheet1.getRow(rowCount1).getCell(1).setCellValue(p.getPt_part());
+   	    			sheet1.getRow(rowCount1).getCell(2).setCellValue(p.getPt_desc1());
+   	    			sheet1.getRow(rowCount1).getCell(3).setCellValue(p.getPt_desc2());
+   	    			sheet1.getRow(rowCount1).getCell(4).setCellValue(cw.getVendor());
+   	                sheet1.getRow(rowCount1).getCell(5).setCellValue(p.getPt_um());
+   	                sheet1.getRow(rowCount1).getCell(6).setCellValue(qty);
+   	              if(model.startsWith("DA")) {
+   	            	 sheet1.getRow(rowCount1).getCell(7).setCellValue(count);
+   	              }
+   	               
+   	           
+   	    		}
+   	    		rowCount1++;
+   	    	}
+     
+    					 }catch(Exception e) {
+    						 e.printStackTrace();
+    		        		 logger.info("loi"+ e);
+    		        	 }
+    	    		}
+		    	for(ReturnWeightLog rwl : lrw) {
+		    		      rwldao.updateStatus(rwl.getId());
+		    	}
+			    String filename =  "RETURN"+"_"+wo.getName() +"_"+simpleDateFormat.format(new Date());
+		    	
+		    	try {
+		        	FileOutputStream fos = new FileOutputStream("D:/"+nameexcel+".xlsx");
+					workbook.write(fos);
+					
+					
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					logger.info(e);
+					e.printStackTrace();
+				}
+         
+	    	return workbook;
+	}
 	public void exportTurnBS(String turn,CloseTime lnt){
 		logger.info("exportTurn "+ "RequestBS");
 		logger.info(config.getDataExcel());

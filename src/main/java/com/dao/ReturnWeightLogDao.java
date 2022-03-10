@@ -17,4 +17,6 @@ public interface ReturnWeightLogDao {
 	public ReturnWeightLog getReturnWeightLog(Long id);
 	public void delete(Long id);
 	List<ReturnWeightLog> getByDate(Date createdate);
+	List<Object[][]> getReturnWeightLogBywoidOrderbyNVL0(String woid);
+	List<ReturnWeightLog> getReturnWeightLogBywoid0(String woid);
 }

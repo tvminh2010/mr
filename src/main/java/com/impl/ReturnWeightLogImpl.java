@@ -75,7 +75,17 @@ private Config config;
 	    return listps;
 	}
 	
+	@Override
+	public List<ReturnWeightLog> getReturnWeightLogBywoid0(String woid) {
+		Session session = this.sessionFactory.getCurrentSession();
+		Query query = session.createQuery("from ReturnWeightLog where  model is not null and model not like  '' and status= 0 and  wo =:woid order by serialnew");
+		query.setParameter("woid", woid);
 
+		List<ReturnWeightLog> listps = (List<ReturnWeightLog>) query.list();
+	   
+	    return listps;
+	}
+	
 	@Override
 	public List<ReturnWeightLog> getByDate(Date createdate) {
 		Session session = this.sessionFactory.getCurrentSession();
@@ -111,6 +121,17 @@ private Config config;
 	public List<Object[][]> getReturnWeightLogBywoidOrderbyNVL(String woid) {
 		Session session = this.sessionFactory.getCurrentSession();
 		Query query = session.createQuery("select wo,model,sum(qty),count(*) from ReturnWeightLog where model is not null and model not like  '' and  status=1 and  wo =:woid group by wo,model");
+		query.setParameter("woid", woid);
+
+		List<Object[][]> listps = query.list();
+	   
+	    return listps;
+	}
+	
+	@Override
+	public List<Object[][]> getReturnWeightLogBywoidOrderbyNVL0(String woid) {
+		Session session = this.sessionFactory.getCurrentSession();
+		Query query = session.createQuery("select wo,model,sum(qty),count(*) from ReturnWeightLog where model is not null and model not like  '' and  status=0 and  wo =:woid group by wo,model");
 		query.setParameter("woid", woid);
 
 		List<Object[][]> listps = query.list();

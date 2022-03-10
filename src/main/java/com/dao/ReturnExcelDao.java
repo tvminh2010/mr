@@ -10,4 +10,5 @@ public interface ReturnExcelDao {
    public void save(ReturnExcel ct);
    List<ReturnExcel> getList(Integer page);
    Long getSize();
+List<ReturnExcel> getList(Date d);
 }

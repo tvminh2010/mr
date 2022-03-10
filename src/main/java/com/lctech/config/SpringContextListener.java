@@ -23,12 +23,14 @@ import org.springframework.stereotype.Component;
 
 import com.config.DBPosgressConnection;
 import com.dao.CloseTimeDao;
+import com.dao.ReturnExcelDao;
 import com.dao.ReturnWeightLogDao;
 import com.dao.WeightElectricQueueDao;
 import com.dao.WorkOrderDao;
 import com.entity.CloseTime;
 import com.entity.CoreWeight;
 import com.entity.Product;
+import com.entity.ReturnExcel;
 import com.entity.ReturnWeightLog;
 import com.entity.WorkOrder;
 import com.lctech.scheduler.MyTask;
@@ -59,6 +61,8 @@ public class SpringContextListener implements ApplicationListener<ContextRefresh
 	   private  ReturnWeightLogDao rwldao;
 		 @Autowired
 			private DBPosgressConnection posgressConn;
+		 @Autowired
+			public ReturnExcelDao rxdao;
 	 /* @Bean
 	    public TaskScheduler taskScheduler() {
 	        return new ConcurrentTaskScheduler();
@@ -87,43 +91,45 @@ public class SpringContextListener implements ApplicationListener<ContextRefresh
 		
 		//update coreweightlog
 		
-		 Date d = addDays(new Date(),-40);
-		 List<ReturnWeightLog> tt = rwldao.getByDate(d) ;
-
-		 for(ReturnWeightLog r : tt) {
-			 
-		 
-			 HashMap<String,String> item = posgressConn.getItemCode(r.getSerialold());
-				if(item != null && item.size()>1) {
-			     String itemcode  = item.get("masp");
-				
-				
-			
-				
-				
-				SimpleDateFormat formatinput = new SimpleDateFormat("yyyy-MM-dd");
-				SimpleDateFormat formatoutput = new SimpleDateFormat("dd/MM/yyyy");
-				Date inputd;
-				try {
-					inputd = formatinput.parse(item.get("receivingdate"));
-					logger.info("receivingdate:" + inputd);
-					logger.info("receivingdate ouput :" + formatoutput.format(inputd));
-
-					 r.setReceivingdate(formatoutput.format(inputd));
-					 
-					 rwldao.save(r);
-				} catch (ParseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				 
-				
-		 }
-		 }
+	 Date d = addDays(new Date(),-40);
+//		 List<ReturnWeightLog> tt = rwldao.getByDate(d) ;
+//
+//		 for(ReturnWeightLog r : tt) {
+//			 
+//		 
+//			 HashMap<String,String> item = posgressConn.getItemCode(r.getSerialold());
+//				if(item != null && item.size()>1) {
+//			     String itemcode  = item.get("masp");
+//				
+//				
+//			
+//				
+//				
+//				SimpleDateFormat formatinput = new SimpleDateFormat("yyyy-MM-dd");
+//				SimpleDateFormat formatoutput = new SimpleDateFormat("dd/MM/yyyy");
+//				Date inputd;
+//				try {
+//					inputd = formatinput.parse(item.get("receivingdate"));
+//					logger.info("receivingdate:" + inputd);
+//					logger.info("receivingdate ouput :" + formatoutput.format(inputd));
+//
+//					 r.setReceivingdate(formatoutput.format(inputd));
+//					 
+//					 rwldao.save(r);
+//				} catch (ParseException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//				 
+//				
+//		 }
+//		 }
 		//export return
-		  List<WorkOrder> lwo = wodao.getListbyDate(d);
-		  for(WorkOrder wo: lwo) {
-		       eportexcel.exportReturn(wo,null);
+		 List<ReturnExcel> lt = rxdao.getList( d);
+		 for(ReturnExcel re: lt) {
+		        
+			 WorkOrder wo=  wodao.getWObyId(re.getWoid());
+		       eportexcel.exportReturn(wo,null,re.getPathexcel());
 		    
 		  }
        

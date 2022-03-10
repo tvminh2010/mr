@@ -1,6 +1,7 @@
 package com.impl;
 
 import java.sql.Time;
+import java.util.Date;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -59,6 +60,19 @@ private Config config;
 			Query query = session.createQuery("select re.id,re.woname,p.pt_desc1,re.line ,re.createdate,re.pathexcel from ReturnExcel re , Product p where  re.model = p.pt_part order by createdate desc").setMaxResults(config.getPageSize())
 		    		.setFirstResult((page - 1) * config.getPageSize());
 		
+			List<ReturnExcel> list = (List<ReturnExcel>) query.list();//get line p1 p2 p3 sample
+		
+			
+			
+			
+			return list;
+	}
+	@Override
+	public List<ReturnExcel> getList(Date d) {
+		 Session session = this.sessionFactory.getCurrentSession();
+		 
+			Query query = session.createQuery(" from ReturnExcel where  createdate > :createdate ");
+			query.setParameter("createdate", d);
 			List<ReturnExcel> list = (List<ReturnExcel>) query.list();//get line p1 p2 p3 sample
 		
 			
